@@ -27,7 +27,11 @@
 ## Issues Encountered
 | Issue | Resolution |
 |-------|------------|
-|       |            |
+| SQLite FTS5 `unicode61` tokenizer doesn't segment CJK (treats consecutive Han chars as one token) | Pre-tokenize: insert CJK text with spaces between Han chars. Python side uses `_FTSConnection` wrapper to also rewrite queries. For Phase 2 server (Node.js), implement equivalent query-side char-splitting in JS before MATCH |
+| Wizards EN rules URL in spec was outdated | Implementer updated to `https://media.wizards.com/2025/downloads/MagicCompRules%2020250404.txt` |
+| EN rules text uses old-Mac `\r` line endings | Normalized in `fetch_en_rules()` |
+| TOC contains "Glossary" which prematurely ended parsing | Guard: only stop at Glossary after at least one rule parsed |
+| Subrule regex needed optional trailing dot | Rule 100.1a has no dot, 100.1 does |
 
 ## Resources
 -

@@ -1,11 +1,19 @@
 """Extract concepts and relations from rule entries using Claude API."""
 
 import json
+import os
 import re
 import hashlib
 from pathlib import Path
 
 import anthropic
+from dotenv import load_dotenv
+
+# Load .env from project root so ANTHROPIC_BASE_URL / ANTHROPIC_API_KEY /
+# ANTHROPIC_MODEL are available to the SDK and to this module.
+load_dotenv(Path(__file__).parent.parent / ".env")
+
+DEFAULT_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
 
 CACHE_DIR = Path(__file__).parent / "cache"
 
@@ -71,13 +79,14 @@ def parse_llm_response(raw: str) -> tuple[list[dict], list[dict]]:
 def extract_chapter(
     entries: list[dict],
     chapter: str,
-    model: str = "claude-sonnet-4-5",
+    model: str = None,
     force: bool = False,
 ) -> tuple[list[dict], list[dict]]:
     """
     Extract concepts and relations for one chapter.
     Results are cached to avoid redundant API calls.
     """
+    model = model or DEFAULT_MODEL
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     content_hash = hashlib.md5(json.dumps(entries, sort_keys=True).encode()).hexdigest()[:8]
     cache_file = CACHE_DIR / f"chapter_{chapter}_{content_hash}.json"
@@ -110,10 +119,11 @@ def extract_chapter(
 
 def extract_all(
     aligned_by_chapter: dict[str, list[dict]],
-    model: str = "claude-sonnet-4-5",
+    model: str = None,
     force: bool = False,
 ) -> tuple[list[dict], list[dict]]:
     """Extract concepts and relations from all chapters."""
+    model = model or DEFAULT_MODEL
     all_concepts = []
     all_relations = []
 
