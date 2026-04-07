@@ -3,12 +3,20 @@
 import re
 import json
 import httpx
+from bs4 import BeautifulSoup
 from pathlib import Path
 
 DATA_DIR = Path(__file__).parent / "data"
 RAW_DIR = DATA_DIR / "raw"
 
 EN_RULES_URL = "https://media.wizards.com/2025/downloads/MagicCompRules%2020250404.txt"
+CN_WIKI_BASE = "https://wiki.mtgjudge.cn/cr"
+CN_CHAPTER_PAGES = list(range(1, 10))  # /cr:1 through /cr:9
+_USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/120.0.0.0 Safari/537.36"
+)
 
 
 def fetch_en_rules(force: bool = False) -> str:
@@ -97,14 +105,115 @@ def parse_en_chapters(text: str) -> dict[str, list[dict]]:
     return chapters
 
 
+# ---------------------------------------------------------------------------
+# CN rules (scraped from wiki.mtgjudge.cn)
+# ---------------------------------------------------------------------------
+
+# Matches rule refs like "100.1." or "100.1a" at the start of a line.
+_CN_RULE_RE = re.compile(r"^(\d{3}\.\d+[a-z]?)\.?\s+(.+)", re.DOTALL)
+
+
+def parse_cn_page(html: str) -> list[dict]:
+    """
+    Parse a CN wiki HTML page into a list of {"rule_ref": "100.1", "text": "..."}.
+
+    Each rule is a <p> containing an <a class="abookmark">, followed by
+    English text, a <br/>, then Chinese text.  We extract only the Chinese.
+    """
+    soup = BeautifulSoup(html, "lxml")
+    entries: list[dict] = []
+
+    for p_tag in soup.find_all("p"):
+        anchor = p_tag.find("a", class_="abookmark")
+        if anchor is None:
+            continue
+
+        # Get the full text content, split on the <br/> tag.
+        # The structure is: [anchor img] EN_LINE <br/> CN_LINE
+        # We use .decode_contents() to preserve <br/> as text, then split.
+        inner = p_tag.decode_contents()
+        # Split on <br/> or <br> or <br />
+        parts = re.split(r"<br\s*/?\s*>", inner)
+        if len(parts) < 2:
+            continue
+
+        # The Chinese text is in the last part after the <br/>
+        cn_part = BeautifulSoup(parts[-1], "lxml").get_text().strip()
+        if not cn_part:
+            continue
+
+        # Extract rule_ref from the Chinese line
+        m = _CN_RULE_RE.match(cn_part)
+        if m:
+            entries.append({
+                "rule_ref": m.group(1),
+                "text": m.group(2).strip(),
+            })
+
+    return entries
+
+
+def fetch_cn_rules(force: bool = False) -> dict[str, list[dict]]:
+    """
+    Scrape CN translation from wiki.mtgjudge.cn/cr.
+
+    Returns dict[str, list[dict]] keyed by chapter number (str),
+    where each entry is {"rule_ref": "100.1", "text": "Chinese text..."}.
+    """
+    out = RAW_DIR / "entries_cn_raw.json"
+    if out.exists() and not force:
+        return json.loads(out.read_text(encoding="utf-8"))
+
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    chapters: dict[str, list[dict]] = {}
+
+    headers = {"User-Agent": _USER_AGENT}
+    with httpx.Client(
+        headers=headers,
+        follow_redirects=True,
+        timeout=60,
+        http2=False,
+    ) as client:
+        for ch in CN_CHAPTER_PAGES:
+            url = f"{CN_WIKI_BASE}:{ch}"
+            # Simple retry loop for flaky SSL/connection issues
+            last_err: Exception | None = None
+            for attempt in range(3):
+                try:
+                    resp = client.get(url)
+                    resp.raise_for_status()
+                    last_err = None
+                    break
+                except (httpx.HTTPError, httpx.ConnectError) as e:
+                    last_err = e
+            if last_err is not None:
+                raise last_err
+
+            entries = parse_cn_page(resp.text)
+            if entries:
+                chapters[str(ch)] = entries
+
+    out.write_text(json.dumps(chapters, ensure_ascii=False, indent=2), encoding="utf-8")
+    return chapters
+
+
 if __name__ == "__main__":
-    print("Fetching EN rules...")
-    text = fetch_en_rules()
-    chapters = parse_en_chapters(text)
     out_dir = DATA_DIR / "processed"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out = out_dir / "entries_en.json"
-    out.write_text(json.dumps(chapters, ensure_ascii=False, indent=2), encoding="utf-8")
-    total = sum(len(v) for v in chapters.values())
-    print(f"Parsed {len(chapters)} chapters, {total} rule entries.")
-    print(f"Saved to {out}")
+
+    print("Fetching EN rules...")
+    text = fetch_en_rules()
+    en_chapters = parse_en_chapters(text)
+    en_out = out_dir / "entries_en.json"
+    en_out.write_text(json.dumps(en_chapters, ensure_ascii=False, indent=2), encoding="utf-8")
+    en_total = sum(len(v) for v in en_chapters.values())
+    print(f"Parsed {len(en_chapters)} EN chapters, {en_total} rule entries.")
+    print(f"Saved to {en_out}")
+
+    print("Fetching CN rules...")
+    cn_chapters = fetch_cn_rules()
+    cn_out = out_dir / "entries_cn.json"
+    cn_out.write_text(json.dumps(cn_chapters, ensure_ascii=False, indent=2), encoding="utf-8")
+    cn_total = sum(len(v) for v in cn_chapters.values())
+    print(f"Parsed {len(cn_chapters)} CN chapters, {cn_total} rule entries.")
+    print(f"Saved to {cn_out}")
