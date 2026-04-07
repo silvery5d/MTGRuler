@@ -1,3 +1,5 @@
+.env
+.env.local
 parser/data/raw/
 parser/data/processed/*.json
 parser/cache/
