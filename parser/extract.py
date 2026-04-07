@@ -100,7 +100,7 @@ def extract_chapter(
     client = anthropic.Anthropic()
     message = client.messages.create(
         model=model,
-        max_tokens=8192,
+        max_tokens=32768,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_prompt}],
     )
@@ -112,7 +112,21 @@ def extract_chapter(
     )
     if raw_response is None:
         raise RuntimeError(f"No text block in LLM response: {message.content}")
-    concepts, relations = parse_llm_response(raw_response)
+
+    # If output was truncated by max_tokens, save raw response for debugging and skip
+    if message.stop_reason == "max_tokens":
+        debug_file = CACHE_DIR / f"chapter_{chapter}_TRUNCATED.txt"
+        debug_file.write_text(raw_response, encoding="utf-8")
+        print(f"  WARN: chapter {chapter} output truncated at max_tokens, saved to {debug_file.name}, skipping")
+        return [], []
+
+    try:
+        concepts, relations = parse_llm_response(raw_response)
+    except json.JSONDecodeError as e:
+        debug_file = CACHE_DIR / f"chapter_{chapter}_PARSE_ERROR.txt"
+        debug_file.write_text(raw_response, encoding="utf-8")
+        print(f"  WARN: chapter {chapter} JSON parse error ({e}), saved to {debug_file.name}, skipping")
+        return [], []
 
     for c in concepts:
         c.setdefault("chapter", chapter)
@@ -137,10 +151,13 @@ def extract_all(
         entries = aligned_by_chapter[chapter]
         print(f"  Extracting chapter {chapter} ({len(entries)} entries)...")
 
-        batch_size = 100
+        batch_size = 40
+        num_batches = (len(entries) + batch_size - 1) // batch_size
         for i in range(0, len(entries), batch_size):
             batch = entries[i:i + batch_size]
-            batch_id = f"{chapter}" if len(entries) <= batch_size else f"{chapter}_part{i // batch_size}"
+            part_num = i // batch_size
+            batch_id = f"{chapter}" if len(entries) <= batch_size else f"{chapter}_part{part_num}"
+            print(f"    batch {part_num + 1}/{num_batches}...", flush=True)
             concepts, relations = extract_chapter(batch, batch_id, model=model, force=force)
             all_concepts.extend(concepts)
             all_relations.extend(relations)
