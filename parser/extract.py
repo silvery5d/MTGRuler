@@ -98,13 +98,27 @@ def extract_chapter(
     user_prompt = build_extraction_prompt(entries, chapter)
 
     client = anthropic.Anthropic()
-    with client.messages.stream(
-        model=model,
-        max_tokens=32768,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_prompt}],
-    ) as stream:
-        message = stream.get_final_message()
+    # Retry on transient network errors (Minimax sometimes drops streams mid-response)
+    import time
+    last_error = None
+    for attempt in range(4):
+        try:
+            with client.messages.stream(
+                model=model,
+                max_tokens=32768,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_prompt}],
+            ) as stream:
+                message = stream.get_final_message()
+            break
+        except Exception as e:
+            last_error = e
+            wait = 2 ** attempt
+            print(f"  WARN: chapter {chapter} attempt {attempt + 1}/4 failed ({type(e).__name__}: {e}), retrying in {wait}s...", flush=True)
+            time.sleep(wait)
+    else:
+        print(f"  ERROR: chapter {chapter} failed after 4 attempts, skipping. Last error: {last_error}", flush=True)
+        return [], []
 
     # Find the text block (some models return ThinkingBlock + TextBlock)
     raw_response = next(
