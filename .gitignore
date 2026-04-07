@@ -1,0 +1,6 @@
+parser/data/raw/
+parser/data/processed/*.json
+parser/cache/
+parser/.venv/
+__pycache__/
+*.pyc
