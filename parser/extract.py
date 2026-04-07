@@ -98,12 +98,13 @@ def extract_chapter(
     user_prompt = build_extraction_prompt(entries, chapter)
 
     client = anthropic.Anthropic()
-    message = client.messages.create(
+    with client.messages.stream(
         model=model,
         max_tokens=32768,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_prompt}],
-    )
+    ) as stream:
+        message = stream.get_final_message()
 
     # Find the text block (some models return ThinkingBlock + TextBlock)
     raw_response = next(
