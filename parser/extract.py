@@ -105,7 +105,13 @@ def extract_chapter(
         messages=[{"role": "user", "content": user_prompt}],
     )
 
-    raw_response = message.content[0].text
+    # Find the text block (some models return ThinkingBlock + TextBlock)
+    raw_response = next(
+        (block.text for block in message.content if getattr(block, "type", None) == "text"),
+        None,
+    )
+    if raw_response is None:
+        raise RuntimeError(f"No text block in LLM response: {message.content}")
     concepts, relations = parse_llm_response(raw_response)
 
     for c in concepts:
