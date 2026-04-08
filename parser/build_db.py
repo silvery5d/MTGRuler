@@ -119,22 +119,49 @@ def dedupe_concepts(concepts: list[dict]) -> list[dict]:
     """Remove duplicate concepts by id, keeping the first occurrence."""
     seen = set()
     result = []
+    skipped = 0
+    required = ("id", "name_en", "name_cn", "type")
     for c in concepts:
+        if not all(k in c and c[k] for k in required):
+            skipped += 1
+            continue
         if c["id"] not in seen:
             seen.add(c["id"])
+            # Fill in optional fields
+            for opt in ("rule_ref", "definition_en", "definition_cn", "chapter", "complexity", "design_notes"):
+                c.setdefault(opt, None)
+            # Normalize chapter: strip "_partN" suffix to get raw chapter number
+            if c.get("chapter") and isinstance(c["chapter"], str) and "_part" in c["chapter"]:
+                c["chapter"] = c["chapter"].split("_part")[0]
+            # Also derive from rule_ref if chapter still missing or non-numeric
+            if (not c.get("chapter") or not str(c["chapter"]).isdigit()) and c.get("rule_ref"):
+                # Rule refs like "702.9" → chapter 7 (first digit of 3-digit rule number)
+                m = re.match(r"^(\d)\d{2}\.", str(c["rule_ref"]))
+                if m:
+                    c["chapter"] = m.group(1)
             result.append(c)
+    if skipped:
+        print(f"  Skipped {skipped} malformed concepts (missing required fields)")
     return result
 
 
 def dedupe_relations(relations: list[dict]) -> list[dict]:
-    """Remove duplicate relations by (source_id, target_id, type)."""
+    """Remove duplicate relations by (source_id, target_id, type). Skips malformed."""
     seen = set()
     result = []
+    skipped = 0
     for r in relations:
+        if not all(k in r for k in ("source_id", "target_id", "type")):
+            skipped += 1
+            continue
         key = (r["source_id"], r["target_id"], r["type"])
         if key not in seen:
             seen.add(key)
+            r.setdefault("rule_ref", None)
+            r.setdefault("description", None)
             result.append(r)
+    if skipped:
+        print(f"  Skipped {skipped} malformed relations (missing required fields)")
     return result
 
 
