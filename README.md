@@ -14,7 +14,7 @@ Built to help players learn the rules and to provide game designers with a navig
 
 ## Demo
 
-<video src="https://raw.githubusercontent.com/silvery5d/MTGRuler/main/docs/media/demo.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/1845fb94-0d1a-441c-8128-c857514064fe
 
 > 🎬 If the inline player doesn't load, [watch the demo here](docs/media/demo.mp4).
 
