@@ -1,121 +1,148 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { GraphView } from "./components/GraphView.js";
+import { SearchBar } from "./components/SearchBar.js";
+import { DetailPanel } from "./components/DetailPanel.js";
+import { PathQuery } from "./components/PathQuery.js";
+import { StatusBar } from "./components/StatusBar.js";
+import { ViewSwitcher } from "./components/ViewSwitcher.js";
+import { HeatMap } from "./components/DesignerView/HeatMap.js";
+import { ChapterOverview } from "./components/DesignerView/ChapterOverview.js";
+import { InteractionMatrix } from "./components/DesignerView/InteractionMatrix.js";
+import { DependencyGraph } from "./components/DesignerView/DependencyGraph.js";
+import { useGraph } from "./hooks/useGraph.js";
+import { useSearch } from "./hooks/useSearch.js";
+import { api } from "./services/api.js";
+import type { Stats } from "./types/index.js";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const graph = useGraph();
+  const search = useSearch();
+  const [pathMode, setPathMode] = useState(false);
+  const [stats, setStats] = useState<Stats | null>(null);
+
+  // Load initial graph + stats
+  useEffect(() => {
+    graph.loadGraph({ chapter: "4" }); // Start small — chapter 4 (zones)
+    api.getStats().then(setStats);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Reload graph when chapter filter changes
+  useEffect(() => {
+    if (graph.filters.chapter) {
+      graph.loadGraph({ chapter: graph.filters.chapter });
+    } else {
+      graph.loadGraph();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graph.filters.chapter]);
+
+  const handleNodeClick = useCallback(
+    (nodeId: string) => {
+      graph.selectConcept(nodeId);
+    },
+    [graph],
+  );
+
+  const handleSearchResultClick = useCallback(
+    (conceptId: string) => {
+      graph.selectConcept(conceptId);
+      graph.loadGraph({ center: conceptId, depth: "2" });
+    },
+    [graph],
+  );
+
+  const handleChapterClick = useCallback(
+    (chapter: string) => {
+      graph.setFilters({ ...graph.filters, chapter });
+      graph.setViewMode("graph");
+    },
+    [graph],
+  );
+
+  const searchForPath = useCallback(async (q: string) => {
+    return api.search(q);
+  }, []);
+
+  const pathHighlightedNodes = useMemo(() => {
+    if (!graph.pathResult) return undefined;
+    return new Set(graph.pathResult.nodes.map((n) => n.id));
+  }, [graph.pathResult]);
+
+  const pathHighlightedEdges = useMemo(() => {
+    if (!graph.pathResult) return undefined;
+    return new Set(graph.pathResult.edges.map((e) => `${e.source}-${e.target}-${e.type}`));
+  }, [graph.pathResult]);
+
+  const renderView = () => {
+    switch (graph.viewMode) {
+      case "heatmap":
+        return <HeatMap graphData={graph.graphData} onNodeClick={handleNodeClick} />;
+      case "chapter-overview":
+        return <ChapterOverview onChapterClick={handleChapterClick} />;
+      case "interaction-matrix":
+        return <InteractionMatrix onConceptClick={handleNodeClick} />;
+      case "dependency":
+        return <DependencyGraph onNodeClick={handleNodeClick} />;
+      default:
+        return (
+          <GraphView
+            elements={graph.cytoscapeElements}
+            onNodeClick={handleNodeClick}
+            highlightedNodes={pathHighlightedNodes}
+            highlightedEdges={pathHighlightedEdges}
+          />
+        );
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="h-screen flex flex-col bg-gray-950 text-white overflow-hidden">
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex-1">
+          <SearchBar
+            query={search.query}
+            results={search.results}
+            loading={search.loading}
+            onSearch={search.search}
+            onClear={search.clear}
+            onResultClick={handleSearchResultClick}
+            onChapterFilter={(ch) => graph.setFilters({ ...graph.filters, chapter: ch })}
+            onTypeFilter={(t) => graph.setFilters({ ...graph.filters, type: t })}
+          />
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+        <div className="pr-3 bg-gray-900 border-b border-gray-700 h-full flex items-center">
+          <ViewSwitcher current={graph.viewMode} onChange={graph.setViewMode} />
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </div>
 
-      <div className="ticks"></div>
+      <div className="flex-1 flex overflow-hidden">
+        {renderView()}
+        <DetailPanel
+          detail={graph.selectedConcept}
+          onClose={graph.clearSelection}
+          onConceptClick={handleNodeClick}
+        />
+      </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <StatusBar
+        nodeCount={graph.graphData?.nodes.length ?? 0}
+        totalCount={stats?.totals.concepts ?? null}
+        loading={graph.loading}
+        error={graph.error}
+      >
+        <PathQuery
+          active={pathMode}
+          pathResult={graph.pathResult}
+          onToggle={() => {
+            setPathMode(!pathMode);
+            graph.clearPath();
+          }}
+          onFindPath={graph.findPath}
+          onClear={graph.clearPath}
+          searchFn={searchForPath}
+        />
+      </StatusBar>
+    </div>
+  );
 }
-
-export default App
