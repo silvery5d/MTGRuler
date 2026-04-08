@@ -4,11 +4,19 @@
 
 Built to help players learn the rules and to provide game designers with a navigable reference to MTG's rule system.
 
+![MTGRuler main view](docs/screenshots/main.png)
+
 - 🎴 **1,141 concepts** extracted from the complete Comprehensive Rules
 - 🔗 **1,501 relationships** between concepts (dependencies, interactions, references)
 - 📖 **3,047 bilingual rule texts** (96% with Chinese translation)
 - 🔍 Full-text search in both English and Chinese (CJK-aware)
 - 🎨 Interactive Cytoscape.js graph with multiple designer views
+
+## Demo
+
+<video src="https://raw.githubusercontent.com/silvery5d/MTGRuler/main/docs/media/demo.mp4" controls width="100%"></video>
+
+> 🎬 If the inline player doesn't load, [watch the demo here](docs/media/demo.mp4).
 
 ## Architecture
 
