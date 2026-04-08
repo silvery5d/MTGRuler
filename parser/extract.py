@@ -76,31 +76,14 @@ def parse_llm_response(raw: str) -> tuple[list[dict], list[dict]]:
     return data.get("concepts", []), data.get("relations", [])
 
 
-def extract_chapter(
-    entries: list[dict],
-    chapter: str,
-    model: str = None,
-    force: bool = False,
-) -> tuple[list[dict], list[dict]]:
-    """
-    Extract concepts and relations for one chapter.
-    Results are cached to avoid redundant API calls.
-    """
-    model = model or DEFAULT_MODEL
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    content_hash = hashlib.md5(json.dumps(entries, sort_keys=True).encode()).hexdigest()[:8]
-    cache_file = CACHE_DIR / f"chapter_{chapter}_{content_hash}.json"
-
-    if cache_file.exists() and not force:
-        cached = json.loads(cache_file.read_text(encoding="utf-8"))
-        return cached["concepts"], cached["relations"]
-
-    user_prompt = build_extraction_prompt(entries, chapter)
-
-    client = anthropic.Anthropic()
-    # Retry on transient network errors (Minimax sometimes drops streams mid-response)
+def _call_llm(entries: list[dict], chapter: str, model: str) -> tuple[list[dict], list[dict]] | None:
+    """Single API call attempt. Returns (concepts, relations) on success, None on any failure."""
     import time
-    last_error = None
+    user_prompt = build_extraction_prompt(entries, chapter)
+    client = anthropic.Anthropic()
+
+    # Network-level retries (Minimax drops streams)
+    message = None
     for attempt in range(4):
         try:
             with client.messages.stream(
@@ -112,37 +95,73 @@ def extract_chapter(
                 message = stream.get_final_message()
             break
         except Exception as e:
-            last_error = e
             wait = 2 ** attempt
-            print(f"  WARN: chapter {chapter} attempt {attempt + 1}/4 failed ({type(e).__name__}: {e}), retrying in {wait}s...", flush=True)
+            print(f"  WARN: chapter {chapter} network attempt {attempt + 1}/4 failed ({type(e).__name__}), retrying in {wait}s...", flush=True)
             time.sleep(wait)
-    else:
-        print(f"  ERROR: chapter {chapter} failed after 4 attempts, skipping. Last error: {last_error}", flush=True)
-        return [], []
+    if message is None:
+        return None
 
-    # Find the text block (some models return ThinkingBlock + TextBlock)
     raw_response = next(
         (block.text for block in message.content if getattr(block, "type", None) == "text"),
         None,
     )
     if raw_response is None:
-        print(f"  WARN: chapter {chapter} no text block in response (content: {message.content}), skipping", flush=True)
-        return [], []
+        print(f"  WARN: chapter {chapter} no text block in response", flush=True)
+        return None
 
-    # If output was truncated by max_tokens, save raw response for debugging and skip
     if message.stop_reason == "max_tokens":
-        debug_file = CACHE_DIR / f"chapter_{chapter}_TRUNCATED.txt"
-        debug_file.write_text(raw_response, encoding="utf-8")
-        print(f"  WARN: chapter {chapter} output truncated at max_tokens, saved to {debug_file.name}, skipping")
-        return [], []
+        print(f"  WARN: chapter {chapter} output truncated at max_tokens", flush=True)
+        return None
 
     try:
-        concepts, relations = parse_llm_response(raw_response)
+        return parse_llm_response(raw_response)
     except json.JSONDecodeError as e:
-        debug_file = CACHE_DIR / f"chapter_{chapter}_PARSE_ERROR.txt"
-        debug_file.write_text(raw_response, encoding="utf-8")
-        print(f"  WARN: chapter {chapter} JSON parse error ({e}), saved to {debug_file.name}, skipping")
-        return [], []
+        print(f"  WARN: chapter {chapter} JSON parse error at char {e.pos}", flush=True)
+        return None
+
+
+def extract_chapter(
+    entries: list[dict],
+    chapter: str,
+    model: str = None,
+    force: bool = False,
+    min_split_size: int = 5,
+) -> tuple[list[dict], list[dict]]:
+    """
+    Extract concepts and relations for one chapter.
+    Results are cached to avoid redundant API calls.
+
+    On failure, recursively splits the batch in half until min_split_size or success.
+    """
+    model = model or DEFAULT_MODEL
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    content_hash = hashlib.md5(json.dumps(entries, sort_keys=True).encode()).hexdigest()[:8]
+    cache_file = CACHE_DIR / f"chapter_{chapter}_{content_hash}.json"
+
+    if cache_file.exists() and not force:
+        cached = json.loads(cache_file.read_text(encoding="utf-8"))
+        return cached["concepts"], cached["relations"]
+
+    result = _call_llm(entries, chapter, model)
+
+    if result is None:
+        # Try splitting the batch in half
+        if len(entries) >= min_split_size * 2:
+            mid = len(entries) // 2
+            print(f"  -> splitting chapter {chapter} ({len(entries)} entries) into {mid} + {len(entries) - mid}", flush=True)
+            left_concepts, left_relations = extract_chapter(
+                entries[:mid], f"{chapter}_a", model=model, force=force, min_split_size=min_split_size,
+            )
+            right_concepts, right_relations = extract_chapter(
+                entries[mid:], f"{chapter}_b", model=model, force=force, min_split_size=min_split_size,
+            )
+            concepts = left_concepts + right_concepts
+            relations = left_relations + right_relations
+        else:
+            print(f"  ERROR: chapter {chapter} below min split size, giving up", flush=True)
+            return [], []
+    else:
+        concepts, relations = result
 
     for c in concepts:
         c.setdefault("chapter", chapter)
