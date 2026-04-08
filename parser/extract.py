@@ -126,7 +126,8 @@ def extract_chapter(
         None,
     )
     if raw_response is None:
-        raise RuntimeError(f"No text block in LLM response: {message.content}")
+        print(f"  WARN: chapter {chapter} no text block in response (content: {message.content}), skipping", flush=True)
+        return [], []
 
     # If output was truncated by max_tokens, save raw response for debugging and skip
     if message.stop_reason == "max_tokens":
