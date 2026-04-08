@@ -6,3 +6,5 @@ parser/cache/
 parser/.venv/
 __pycache__/
 *.pyc
+server/node_modules/
+server/dist/
