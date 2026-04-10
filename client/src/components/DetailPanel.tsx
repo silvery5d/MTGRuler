@@ -14,7 +14,7 @@ export function DetailPanel({ detail, onClose, onConceptClick }: DetailPanelProp
   const color = NODE_COLORS[concept.type] || "#6b7280";
 
   return (
-    <div className="w-80 bg-gray-900 border-l border-gray-700 overflow-y-auto flex flex-col">
+    <div className="w-80 flex-shrink-0 bg-gray-900 border-l border-gray-700 overflow-y-auto flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-between mb-2">
           <span

@@ -10,58 +10,86 @@ interface GraphViewProps {
   highlightedEdges?: Set<string>;
 }
 
-export function GraphView({ elements, onNodeClick, highlightedNodes, highlightedEdges }: GraphViewProps) {
-  const cyRef = useRef<cytoscape.Core | null>(null);
+export function GraphView({
+  elements,
+  onNodeClick,
+  highlightedNodes,
+  highlightedEdges,
+}: GraphViewProps) {
+  const onNodeClickRef = useRef(onNodeClick);
+  onNodeClickRef.current = onNodeClick;
 
+  // react-cytoscapejs calls `props.cy(this._cy)` on EVERY componentDidUpdate.
+  // We use this to our advantage: run different updates at different
+  // frequencies by guarding with flags on the cy instance itself.
   const handleCy = useCallback(
     (cy: cytoscape.Core) => {
-      cyRef.current = cy;
+      const cyAny = cy as any;
 
-      cy.removeAllListeners();
+      // --- Listeners: attach exactly once per cy instance ---
+      if (!cyAny._listenersAttached) {
+        cyAny._listenersAttached = true;
 
-      cy.on("tap", "node", (evt) => {
-        const nodeId = evt.target.id();
-        onNodeClick(nodeId);
-      });
-
-      cy.on("dbltap", "node", (evt) => {
-        const node = evt.target;
-        cy.animate({
-          center: { eles: node },
-          zoom: cy.zoom() * 1.5,
+        cy.on("tap", "node", (evt) => {
+          onNodeClickRef.current(evt.target.id());
         });
-      });
 
-      if (highlightedNodes || highlightedEdges) {
-        cy.elements().addClass("dimmed");
-        if (highlightedNodes) {
-          highlightedNodes.forEach((id) => {
-            cy.getElementById(id).removeClass("dimmed").addClass("highlighted");
+        cy.on("dbltap", "node", (evt) => {
+          cy.animate({
+            center: { eles: evt.target },
+            zoom: cy.zoom() * 1.5,
           });
-        }
-        if (highlightedEdges) {
-          highlightedEdges.forEach((id) => {
-            cy.getElementById(id).removeClass("dimmed").addClass("highlighted");
-          });
-        }
-      } else {
-        cy.elements().removeClass("dimmed highlighted");
+        });
       }
 
-      cy.layout({
-        name: "cose",
-        animate: true,
-        animationDuration: 500,
-        nodeRepulsion: () => 8000,
-        idealEdgeLength: () => 100,
-        padding: 50,
-      } as cytoscape.LayoutOptions).run();
+      // --- Layout: re-run only when node count changes ---
+      const nodeCount = cy.nodes().length;
+      if (nodeCount > 0 && cyAny._lastNodeCount !== nodeCount) {
+        cyAny._lastNodeCount = nodeCount;
+
+        try {
+          // Scale repulsion and edge length by graph density to prevent overlap.
+          const edgeCount = cy.edges().length;
+          const density = nodeCount > 0 ? edgeCount / nodeCount : 1;
+          const repulsion = Math.max(10000, 4500 * (1 + density));
+          const edgeLen = Math.max(150, 80 + nodeCount * 0.5);
+
+          cy.layout({
+            name: "fcose",
+            animate: nodeCount < 200,
+            animationDuration: 400,
+            nodeRepulsion: () => repulsion,
+            idealEdgeLength: () => edgeLen,
+            nodeSeparation: 150,
+            padding: 60,
+            quality: nodeCount > 500 ? "draft" : "default",
+            randomize: true,
+            nodeDimensionsIncludeLabels: true,
+          } as cytoscape.LayoutOptions).run();
+        } catch {
+          cy.layout({ name: "grid", padding: 30 }).run();
+        }
+      }
+
+      // --- Highlights: update every time (cheap, batched) ---
+      cy.batch(() => {
+        cy.elements().removeClass("dimmed highlighted");
+        if (highlightedNodes || highlightedEdges) {
+          cy.elements().addClass("dimmed");
+          highlightedNodes?.forEach((id) => {
+            cy.getElementById(id).removeClass("dimmed").addClass("highlighted");
+          });
+          highlightedEdges?.forEach((id) => {
+            cy.getElementById(id).removeClass("dimmed").addClass("highlighted");
+          });
+        }
+      });
     },
-    [onNodeClick, highlightedNodes, highlightedEdges],
+    [highlightedNodes, highlightedEdges],
   );
 
   return (
-    <div className="flex-1 relative">
+    <div className="flex-1 relative min-w-0 overflow-hidden">
       {elements.length === 0 ? (
         <div className="flex items-center justify-center h-full text-gray-400">
           Loading graph...
