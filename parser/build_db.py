@@ -214,7 +214,9 @@ def insert_rule_texts(conn: sqlite3.Connection, rule_texts: list[dict]):
 
 def build(force: bool = False):
     """Build the complete database from processed data."""
-    db_path = DATA_DIR / "concepts.db"
+    # Raw LLM extraction output. The final curated `concepts.db` is produced
+    # downstream by normalize_relations.py + apply_fixes.py.
+    db_path = DATA_DIR / "concepts_raw.db"
     if db_path.exists() and not force:
         print(f"Database already exists at {db_path}. Use force=True to rebuild.")
         return

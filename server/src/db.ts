@@ -2,6 +2,8 @@ import Database from "better-sqlite3";
 import { existsSync } from "fs";
 import { resolve } from "path";
 
+// concepts.db is the final curated DB (normalized relations + concept fixes).
+// The raw LLM output lives in concepts_raw.db for rebuild/audit purposes.
 const DB_PATH =
   process.env.DB_PATH ||
   resolve(import.meta.dirname, "../../parser/data/concepts.db");

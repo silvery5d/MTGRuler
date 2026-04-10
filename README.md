@@ -99,15 +99,32 @@ cp ../.env.example ../.env
 # Works with Anthropic directly or any Anthropic-compatible proxy
 # (e.g., Minimax CodePlan, DeepSeek, GLM).
 
-# 3. Run the full pipeline
+# 3. Run the full pipeline (produces concepts_raw.db)
 python run_pipeline.py
 #   [1/4] Fetching rules (EN from Wizards, CN from wiki.mtgjudge.cn)
 #   [2/4] Aligning EN/CN entries by rule_ref
 #   [3/4] Extracting concepts via LLM (caches per-batch, may take 30-60 min)
-#   [4/4] Building SQLite database (FTS5 indexes, CJK tokenization)
+#   [4/4] Building SQLite database → concepts_raw.db
+
+# 4. Normalize relations + apply curated fixes (produces concepts.db)
+python normalize_relations.py   # 150+ relation types → 9 canonical + drops self-loops
+python apply_fixes.py            # type/rule_ref/definition fixes surfaced by validation
 ```
 
-The pipeline is idempotent — successful batches are cached in `parser/cache/`, so re-running only retries failed batches.
+The parser pipeline is idempotent — successful batches are cached in `parser/cache/`, so re-running only retries failed batches.
+
+### Optional: cross-validate the database with a second LLM
+
+An independent DeepSeek-based validator can be run against the curated DB to measure extraction quality or find residual errors. Set `DEEPSEEK_API_KEY` in `.env` first.
+
+```bash
+python validate.py --sample 100                          # random 100-concept + 100-relation audit
+python validate.py --ids "keyword.flying,zone.stack"     # validate specific concepts
+python compare_dbs.py --sample 50                        # side-by-side concepts_raw.db vs concepts.db
+python audit_rule_refs.py --suggest-fixes                # text-match rule_ref audit for 701/702 chapters
+```
+
+Reports are written under `docs/validation_report*.md` and `docs/db_comparison.md`. The most recent full run (n=300) showed **60% correct / 5.7% wrong** on concepts against the curated DB, vs 41% / 17% on the raw extraction.
 
 ## API endpoints
 
@@ -147,17 +164,23 @@ curl "http://localhost:3001/api/v1/concepts/keyword.flying" | jq
 
 ```
 MTGRuler/
-├── parser/              # Python data pipeline
-│   ├── fetch_rules.py   # EN rules download + CN wiki scraping
-│   ├── preprocess.py    # Align EN/CN entries by rule_ref
-│   ├── extract.py       # LLM-assisted concept extraction (with recursive split-on-failure)
-│   ├── build_db.py      # SQLite build + FTS5 setup + CJK tokenization
-│   ├── run_pipeline.py  # Orchestrator
-│   ├── cache/           # Per-batch LLM response cache
+├── parser/                   # Python data pipeline
+│   ├── fetch_rules.py        # EN rules download + CN wiki scraping
+│   ├── preprocess.py         # Align EN/CN entries by rule_ref
+│   ├── extract.py            # LLM-assisted concept extraction (recursive split-on-failure)
+│   ├── build_db.py           # SQLite build + FTS5 setup + CJK tokenization
+│   ├── run_pipeline.py       # Orchestrator
+│   ├── normalize_relations.py # 150+ relation types → 9 canonical (+ direction fix)
+│   ├── apply_fixes.py        # Curated type/rule_ref/definition fixes (idempotent)
+│   ├── validate.py           # DeepSeek cross-validator
+│   ├── audit_rule_refs.py    # Text-match rule_ref consistency audit
+│   ├── compare_dbs.py        # Before/after DB quality comparison
+│   ├── cache/                # Per-batch LLM response cache
 │   └── data/
-│       ├── raw/         # Raw rule text files (gitignored)
-│       ├── processed/   # Structured intermediates (gitignored)
-│       └── concepts.db  # Final SQLite database (committed)
+│       ├── raw/              # Raw rule text files (gitignored)
+│       ├── processed/        # Structured intermediates (gitignored)
+│       ├── concepts_raw.db   # Raw LLM extraction output (committed)
+│       └── concepts.db       # Curated final DB — what the server loads (committed)
 ├── server/              # Node.js REST API
 │   ├── src/
 │   │   ├── index.ts     # Express entry
