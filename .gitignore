@@ -10,3 +10,6 @@ server/node_modules/
 server/dist/
 client/node_modules/
 client/dist/
+
+# Claude Code /export transcript dumps
+*-command-message*.txt
