@@ -1,4 +1,4 @@
-import type { Concept, ConceptDetail, GraphData, PathResult, Stats } from "../types/index.js";
+import type { Concept, ConceptDetail, GraphData, PathResult, Stats, VersionInfo, MetricsRecord, SpikeRecord, HistoryDiff } from "../types/index.js";
 
 const BASE = "/api/v1";
 
@@ -41,5 +41,28 @@ export const api = {
 
   getStats() {
     return get<Stats>(`${BASE}/stats`);
+  },
+
+  // History endpoints
+  getHistoryVersions() {
+    return get<VersionInfo[]>(`${BASE}/history/versions`);
+  },
+  getHistoryMetrics() {
+    return get<MetricsRecord[]>(`${BASE}/history/metrics`);
+  },
+  getHistorySpikes() {
+    return get<SpikeRecord[]>(`${BASE}/history/spikes`);
+  },
+  getHistoryVersionGraph(setCode: string) {
+    return get<GraphData>(`${BASE}/history/${encodeURIComponent(setCode)}/graph`);
+  },
+  getHistoryVersionConcept(setCode: string, conceptId: string) {
+    return get<ConceptDetail>(`${BASE}/history/${encodeURIComponent(setCode)}/concepts/${encodeURIComponent(conceptId)}`);
+  },
+  getHistoryDiff(oldCode: string, newCode: string) {
+    return get<HistoryDiff>(`${BASE}/history/diff`, { old: oldCode, new: newCode });
+  },
+  getConceptTrace(conceptId: string) {
+    return get<any[]>(`${BASE}/history/concept-trace/${encodeURIComponent(conceptId)}`);
   },
 };
