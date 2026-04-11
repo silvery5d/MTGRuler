@@ -9,6 +9,7 @@ import { HeatMap } from "./components/DesignerView/HeatMap.js";
 import { ChapterOverview } from "./components/DesignerView/ChapterOverview.js";
 import { InteractionMatrix } from "./components/DesignerView/InteractionMatrix.js";
 import { DependencyGraph } from "./components/DesignerView/DependencyGraph.js";
+import { HistoryView } from "./components/HistoryView/HistoryView.js";
 import { useGraph } from "./hooks/useGraph.js";
 import { useSearch } from "./hooks/useSearch.js";
 import { api } from "./services/api.js";
@@ -84,6 +85,8 @@ export default function App() {
         return <InteractionMatrix onConceptClick={handleNodeClick} />;
       case "dependency":
         return <DependencyGraph onNodeClick={handleNodeClick} />;
+      case "history":
+        return <HistoryView />;
       default:
         return (
           <GraphView

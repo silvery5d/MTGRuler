@@ -6,6 +6,7 @@ const VIEW_OPTIONS: { value: ViewMode; label: string }[] = [
   { value: "heatmap", label: "Complexity Heatmap" },
   { value: "chapter-overview", label: "Chapter Overview" },
   { value: "interaction-matrix", label: "Interaction Matrix" },
+  { value: "history", label: "History (Complexity Evolution)" },
 ];
 
 interface ViewSwitcherProps {
