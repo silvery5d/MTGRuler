@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
 import { getDb, closeDb } from "./db.js";
+import { computeUnderstandingComplexity } from "./utils/understanding-complexity.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 import { createRelationsRouter } from "./routes/relations.js";
 import { createSearchRouter } from "./routes/search.js";
 import { createPathRouter } from "./routes/path.js";
 import { createGraphRouter } from "./routes/graph.js";
 import { createStatsRouter } from "./routes/stats.js";
+import { createHistoryRouter, loadHistory, closeHistory } from "./routes/history.js";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001");
@@ -15,13 +17,18 @@ app.use(cors());
 app.use(express.json());
 
 const db = getDb();
+const ucCache = computeUnderstandingComplexity(db);
+console.log(`Computed understanding_complexity for ${ucCache.size} concepts`);
 
-app.use("/api/v1/concepts", createConceptsRouter(db));
+app.use("/api/v1/concepts", createConceptsRouter(db, ucCache));
 app.use("/api/v1/relations", createRelationsRouter(db));
-app.use("/api/v1/search", createSearchRouter(db));
+app.use("/api/v1/search", createSearchRouter(db, ucCache));
 app.use("/api/v1/path", createPathRouter(db));
-app.use("/api/v1/graph", createGraphRouter(db));
+app.use("/api/v1/graph", createGraphRouter(db, ucCache));
 app.use("/api/v1/stats", createStatsRouter(db));
+
+loadHistory();
+app.use("/api/v1/history", createHistoryRouter());
 
 app.get("/api/v1/health", (_req, res) => {
   res.json({ status: "ok" });
@@ -34,6 +41,7 @@ const server = app.listen(PORT, () => {
 
 process.on("SIGINT", () => {
   console.log("\nShutting down...");
+  closeHistory();
   closeDb();
   server.close();
   process.exit(0);
