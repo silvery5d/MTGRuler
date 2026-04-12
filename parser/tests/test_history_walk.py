@@ -7,7 +7,7 @@ from unittest.mock import patch
 from history import walk_versions
 
 
-def test_walk_returns_chronological_order(monkeypatch, tmp_path):
+def test_walk_includes_pre_akh_and_chain(monkeypatch, tmp_path):
     monkeypatch.setattr(walk_versions, "VERSIONS_INDEX", tmp_path / "idx.json")
 
     latest = {
@@ -29,6 +29,13 @@ def test_walk_returns_chronological_order(monkeypatch, tmp_path):
 
     chain = walk_versions.walk_all_versions(max_steps=10)
     codes = [v["set_code"] for v in chain]
-    assert codes == ["A", "B", "C"]
-    assert chain[0]["next_set_code"] == "B"
+    # Pre-AKH known sets are prepended, then chain A→B→C follows
+    assert "6ED" in codes
+    assert "A" in codes
+    assert "B" in codes
+    assert "C" in codes
+    # Last entry should have no next
+    assert chain[-1]["set_code"] == "C"
     assert chain[-1]["next_set_code"] is None
+    # 6ED should be before A
+    assert codes.index("6ED") < codes.index("A")

@@ -1,5 +1,5 @@
 """Incrementally extract concepts for a new CR version using the previous
-version's DB plus the Academy Ruins diff."""
+version's DB plus a diff (from Academy Ruins or computed locally)."""
 
 import json
 import shutil
@@ -126,8 +126,49 @@ def replace_rule_texts(db: sqlite3.Connection, records: list[dict]) -> None:
     db.commit()
 
 
+def compute_local_diff(prev_set: str, curr_set: str) -> dict:
+    """Compute a diff locally by parsing both versions and comparing rule_refs."""
+    prev_chapters = parse_version(prev_set)
+    curr_chapters = parse_version(curr_set)
+
+    prev_rules: dict[str, str] = {}
+    for entries in prev_chapters.values():
+        for e in entries:
+            prev_rules[e["rule_ref"]] = e["text"]
+
+    curr_rules: dict[str, str] = {}
+    for entries in curr_chapters.values():
+        for e in entries:
+            curr_rules[e["rule_ref"]] = e["text"]
+
+    changes = []
+    for ref in sorted(set(prev_rules) | set(curr_rules)):
+        old_text = prev_rules.get(ref)
+        new_text = curr_rules.get(ref)
+        if old_text and not new_text:
+            changes.append({"old": {"ruleNumber": ref, "ruleText": old_text}, "new": None})
+        elif new_text and not old_text:
+            changes.append({"old": None, "new": {"ruleNumber": ref, "ruleText": new_text}})
+        elif old_text != new_text:
+            changes.append({
+                "old": {"ruleNumber": ref, "ruleText": old_text},
+                "new": {"ruleNumber": ref, "ruleText": new_text},
+            })
+
+    return {"sourceCode": prev_set, "destCode": curr_set, "changes": changes, "moves": []}
+
+
+def get_diff(prev_set: str, curr_set: str) -> dict:
+    """Get diff: try Academy Ruins first, fall back to local computation."""
+    try:
+        return fetch_diff(prev_set, curr_set)
+    except (ValueError, Exception):
+        print(f"    No Academy Ruins diff for {prev_set}→{curr_set}, computing locally...")
+        return compute_local_diff(prev_set, curr_set)
+
+
 def incremental_extract(prev_set: str, curr_set: str, force: bool = False) -> Path:
-    """Build curr_set.db from prev_set.db using Academy Ruins diff."""
+    """Build curr_set.db from prev_set.db using diff (Academy Ruins or local)."""
     prev_set = prev_set.upper()
     curr_set = curr_set.upper()
     prev_db = CONCEPT_DBS_DIR / f"{prev_set}.db"
@@ -143,8 +184,8 @@ def incremental_extract(prev_set: str, curr_set: str, force: bool = False) -> Pa
     print(f"  Copying {prev_set}.db → {curr_set}.db")
     shutil.copy(prev_db, curr_db)
 
-    print(f"  Fetching diff {prev_set} → {curr_set}")
-    diff = fetch_diff(prev_set, curr_set)
+    print(f"  Getting diff {prev_set} → {curr_set}")
+    diff = get_diff(prev_set, curr_set)
 
     affected_refs = collect_affected_refs(diff)
     chapters_to_redo = affected_chapters(affected_refs)
