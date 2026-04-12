@@ -14,9 +14,16 @@ from .fetch import fetch_diff, fetch_latest_diff_with_nav, fetch_cr_text, _get_c
 
 VERSIONS_INDEX = DATA_DIR / "versions_index.json"
 
-# All known MTG set codes in chronological order that had CR updates.
-# Academy Ruins hosts CR files for these (verified via HTTP 200 probes).
+# All known MTG versions in chronological order.
+# Pre-CR era (narrative rulebooks) from hudecekpetr.cz archive.
+# CR era (6ED onward) from Academy Ruins (verified via HTTP 200 probes).
 KNOWN_PRE_AKH_SETS: list[tuple[str, str, str | None]] = [
+    # Pre-CR narrative rulebooks (fetched from hudecekpetr.cz)
+    ("ALPHA", "Alpha / Beta Rulebook", "1993-08-05"),
+    ("UNLIMITED", "Unlimited Rulebook", "1993-12-01"),
+    ("REVISED", "Revised Edition Rulebook", "1994-04-01"),
+    ("5TH", "Fifth Edition Rulebook", "1997-03-01"),
+    # Comprehensive Rules era
     ("6ED", "Classic Sixth Edition", "1999-04-28"),
     ("APC", "Apocalypse", "2001-06-04"),
     ("ODY", "Odyssey", "2001-10-01"),
