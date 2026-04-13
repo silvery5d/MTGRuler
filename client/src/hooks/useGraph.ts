@@ -80,7 +80,7 @@ export function useGraph() {
             id: n.id,
             label: n.name_cn || n.name_en,
             color: NODE_COLORS[n.type] || "#6b7280",
-            size: 10 + (n.complexity ?? 2) * 4,
+            size: 8 + (n.complexity ?? 2) * 3,
             nodeType: n.type,
           },
         })),

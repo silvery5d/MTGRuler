@@ -56,9 +56,9 @@ export function GraphView({
           updateEdgeIndicators(cy, node);
         });
 
-        // Click background to clear
+        // Click anything that's not a node → clear selection
         cy.on("tap", (evt) => {
-          if (evt.target === cy) {
+          if (evt.target === cy || evt.target.isEdge()) {
             cy.batch(() => {
               cy.elements().removeClass("dimmed highlighted neighbor-highlight");
             });
@@ -81,21 +81,21 @@ export function GraphView({
         });
 
         // Cap the visual size of nodes and text when zoomed in.
-        const CAP_ZOOM = 1.0;
+        const CAP_ZOOM = 2.0;
         const applyZoomCap = () => {
           const z = cy.zoom();
           if (z > CAP_ZOOM) {
             const scale = CAP_ZOOM / z;
             cy.nodes().forEach((n) => {
               const base = n.data("size") || 14;
-              n.style({ width: base * scale, height: base * scale, "border-width": 2 * scale });
+              n.style({ width: base * scale, height: base * scale, "border-width": 2 * scale, "text-margin-y": 4 * scale });
             });
             cy.style().selector("node").style({ "font-size": 10 * scale, "text-outline-width": 2 * scale }).update();
             cy.style().selector("edge").style({ width: 2 * scale, "arrow-scale": scale }).update();
           } else {
             cy.nodes().forEach((n) => {
               const base = n.data("size") || 14;
-              n.style({ width: base, height: base, "border-width": 2 });
+              n.style({ width: base, height: base, "border-width": 2, "text-margin-y": 4 });
             });
             cy.style().selector("node").style({ "font-size": 10, "text-outline-width": 2 }).update();
             cy.style().selector("edge").style({ width: 2, "arrow-scale": 1 }).update();
@@ -121,24 +121,13 @@ export function GraphView({
           const edgeCount = cy.edges().length;
           const density = nodeCount > 0 ? edgeCount / nodeCount : 1;
 
-          const baseRepulsion = nodeCount > 500
-            ? 200000 + nodeCount * 200
-            : nodeCount > 200
-              ? 60000 + nodeCount * 80
-              : Math.max(10000, 4500 * (1 + density));
+          const baseRepulsion = Math.max(15000, 6000 * (1 + density));
+          const edgeLen = Math.max(180, 100 + nodeCount * 0.5);
+          const separation = 200;
 
-          const edgeLen = nodeCount > 500
-            ? 500 + nodeCount * 0.3
-            : nodeCount > 200
-              ? 300 + nodeCount * 0.5
-              : Math.max(150, 80 + nodeCount * 0.5);
-
-          const separation = nodeCount > 500 ? 500 : nodeCount > 200 ? 300 : 150;
-
-          cy.layout({
+          const layout = cy.layout({
             name: "fcose",
-            animate: nodeCount < 200,
-            animationDuration: 400,
+            animate: false,
             nodeRepulsion: () => baseRepulsion,
             idealEdgeLength: () => edgeLen,
             nodeSeparation: separation,
@@ -146,7 +135,37 @@ export function GraphView({
             quality: nodeCount > 500 ? "draft" : "default",
             randomize: true,
             nodeDimensionsIncludeLabels: true,
-          } as cytoscape.LayoutOptions).run();
+          } as cytoscape.LayoutOptions);
+          layout.run();
+
+          // Post-layout: push apart overlapping nodes
+          const OVERLAP_THRESHOLD = 5; // pixels in model space
+          const PUSH_DISTANCE = 30;
+          const positions = new Map<string, { x: number; y: number }>();
+          cy.nodes().forEach((n) => {
+            positions.set(n.id(), { ...n.position() });
+          });
+          cy.nodes().forEach((n) => {
+            const pos = positions.get(n.id())!;
+            cy.nodes().forEach((m) => {
+              if (n.id() >= m.id()) return;
+              const mpos = positions.get(m.id())!;
+              const dx = pos.x - mpos.x;
+              const dy = pos.y - mpos.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < OVERLAP_THRESHOLD) {
+                // Push apart in a circle pattern based on hash
+                const angle = ((n.id().length * 97 + m.id().length * 31) % 360) * Math.PI / 180;
+                mpos.x += Math.cos(angle) * PUSH_DISTANCE;
+                mpos.y += Math.sin(angle) * PUSH_DISTANCE;
+              }
+            });
+          });
+          cy.batch(() => {
+            positions.forEach((pos, id) => {
+              cy.getElementById(id).position(pos);
+            });
+          });
         } catch {
           cy.layout({ name: "grid", padding: 30 }).run();
         }

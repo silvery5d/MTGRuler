@@ -80,9 +80,9 @@ def _call_llm(entries: list[dict], chapter: str, model: str) -> tuple[list[dict]
     """Single API call attempt. Returns (concepts, relations) on success, None on any failure."""
     import time
     user_prompt = build_extraction_prompt(entries, chapter)
-    client = anthropic.Anthropic()
+    client = anthropic.Anthropic(timeout=120.0)
 
-    # Network-level retries (Minimax drops streams)
+    # Network-level retries with 120s timeout per attempt
     message = None
     for attempt in range(4):
         try:

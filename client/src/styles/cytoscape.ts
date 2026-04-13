@@ -65,24 +65,27 @@ export const defaultStylesheet: Stylesheet[] = [
     },
   },
   {
-    selector: "node.highlighted",
-    style: {
-      "border-width": 3,
-      "border-color": "#fbbf24",
-    },
-  },
-  {
     selector: "node.neighbor-highlight",
     style: {
       "border-width": 3,
       "border-color": "#38bdf8",
-      "z-index": 10,
+      "z-index": 9999,
+    },
+  },
+  {
+    selector: "node.highlighted",
+    style: {
+      "border-width": 3,
+      "border-color": "#fbbf24",
+      "z-index": 10000,
     },
   },
   {
     selector: "node.dimmed",
     style: {
-      opacity: 0.15,
+      opacity: 0.08,
+      "z-index": 0,
+      label: "",
     },
   },
   {
@@ -112,13 +115,14 @@ export const defaultStylesheet: Stylesheet[] = [
       opacity: 1,
       "line-color": "#38bdf8",
       "target-arrow-color": "#38bdf8",
-      "z-index": 10,
+      "z-index": 9999,
     },
   },
   {
     selector: "edge.dimmed",
     style: {
-      opacity: 0.08,
+      opacity: 0.04,
+      "z-index": 0,
     },
   },
 ];
