@@ -114,9 +114,9 @@ def fetch_cr_text(set_code: str, force: bool = False) -> str:
         cache_file.write_text(text, encoding="utf-8")
         return text
 
-    # Academy Ruins API
+    # Academy Ruins API — don't pass format=txt since some old versions are PDF-only
     client = _get_client()
-    resp = client.get(f"/file/cr/{set_code}", params={"format": "txt"})
+    resp = client.get(f"/file/cr/{set_code}")
     resp.raise_for_status()
     text = resp.text
     cache_file.write_text(text, encoding="utf-8")

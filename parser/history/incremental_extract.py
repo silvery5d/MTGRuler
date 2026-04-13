@@ -114,12 +114,12 @@ def replace_rule_texts(db: sqlite3.Connection, records: list[dict]) -> None:
             parent = rule_ref_to_concept.get(base_ref)
         r["parent_concept_id"] = parent
     db.executemany(
-        """INSERT INTO rule_texts (rule_ref, text_en, text_cn, parent_concept_id)
+        """INSERT OR REPLACE INTO rule_texts (rule_ref, text_en, text_cn, parent_concept_id)
            VALUES (:rule_ref, :text_en, :text_cn, :parent_concept_id)""",
         records,
     )
     db.executemany(
-        """INSERT INTO rule_texts_fts (rule_ref, text_en, text_cn)
+        """INSERT OR REPLACE INTO rule_texts_fts (rule_ref, text_en, text_cn)
            VALUES (:rule_ref, :text_en, :text_cn)""",
         [{"rule_ref": r["rule_ref"], "text_en": r["text_en"], "text_cn": r["text_cn"]} for r in records],
     )
