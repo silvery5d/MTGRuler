@@ -49,12 +49,12 @@ export const defaultStylesheet: Stylesheet[] = [
       color: "#e2e8f0",
       "text-outline-color": "#0f172a",
       "text-outline-width": 2,
-      "font-size": 9,
-      "text-max-width": "70px",
+      "font-size": 10,
+      "text-max-width": "80px",
       "text-wrap": "ellipsis",
       width: "data(size)",
       height: "data(size)",
-      "min-zoomed-font-size": 6,
+      "min-zoomed-font-size": 12,
     },
   },
   {
@@ -72,9 +72,17 @@ export const defaultStylesheet: Stylesheet[] = [
     },
   },
   {
+    selector: "node.neighbor-highlight",
+    style: {
+      "border-width": 3,
+      "border-color": "#38bdf8",
+      "z-index": 10,
+    },
+  },
+  {
     selector: "node.dimmed",
     style: {
-      opacity: 0.3,
+      opacity: 0.15,
     },
   },
   {
@@ -98,9 +106,19 @@ export const defaultStylesheet: Stylesheet[] = [
     },
   },
   {
+    selector: "edge.neighbor-highlight",
+    style: {
+      width: 3,
+      opacity: 1,
+      "line-color": "#38bdf8",
+      "target-arrow-color": "#38bdf8",
+      "z-index": 10,
+    },
+  },
+  {
     selector: "edge.dimmed",
     style: {
-      opacity: 0.15,
+      opacity: 0.08,
     },
   },
 ];
