@@ -48,20 +48,35 @@ export function GraphView({
         cyAny._lastNodeCount = nodeCount;
 
         try {
-          // Scale repulsion and edge length by graph density to prevent overlap.
+          // Scale layout parameters aggressively by node count to prevent overlap.
           const edgeCount = cy.edges().length;
           const density = nodeCount > 0 ? edgeCount / nodeCount : 1;
-          const repulsion = Math.max(10000, 4500 * (1 + density));
-          const edgeLen = Math.max(150, 80 + nodeCount * 0.5);
+
+          // Repulsion scales quadratically with node count for large graphs
+          const baseRepulsion = nodeCount > 500
+            ? 80000 + nodeCount * 100
+            : nodeCount > 200
+              ? 40000 + nodeCount * 50
+              : Math.max(10000, 4500 * (1 + density));
+
+          // Edge length grows with node count so clusters spread out
+          const edgeLen = nodeCount > 500
+            ? 300 + nodeCount * 0.2
+            : nodeCount > 200
+              ? 200 + nodeCount * 0.3
+              : Math.max(150, 80 + nodeCount * 0.5);
+
+          // Node separation — minimum gap between non-connected nodes
+          const separation = nodeCount > 500 ? 300 : nodeCount > 200 ? 200 : 150;
 
           cy.layout({
             name: "fcose",
             animate: nodeCount < 200,
             animationDuration: 400,
-            nodeRepulsion: () => repulsion,
+            nodeRepulsion: () => baseRepulsion,
             idealEdgeLength: () => edgeLen,
-            nodeSeparation: 150,
-            padding: 60,
+            nodeSeparation: separation,
+            padding: 80,
             quality: nodeCount > 500 ? "draft" : "default",
             randomize: true,
             nodeDimensionsIncludeLabels: true,
