@@ -54,22 +54,31 @@ def merge_chapter(
     chapter: str,
     new_concepts: list[dict],
     new_relations: list[dict],
+    removed_refs: set[str] | None = None,
 ) -> None:
-    """Merge newly extracted concepts/relations for a chapter into the DB."""
+    """Merge newly extracted concepts/relations for a chapter into the DB.
+
+    Strategy:
+      - Only delete concepts whose rule_ref is in `removed_refs` (the rules
+        that were explicitly deleted between versions).
+      - Existing concepts NOT touched by the diff are preserved, even if the
+        LLM re-extraction didn't re-emit them (avoids silent concept loss
+        from LLM output variability).
+      - New concepts (INSERT OR REPLACE) overwrite matching ids.
+    """
     new_concepts = dedupe_concepts(new_concepts)
     new_relations = dedupe_relations(new_relations)
 
-    new_ids = {c["id"] for c in new_concepts}
-    old_ids_in_chapter = {
-        row[0] for row in db.execute(
-            "SELECT id FROM concepts WHERE chapter = ?", (chapter,)
+    # Only delete concepts tied to rules that were explicitly removed.
+    if removed_refs:
+        placeholders = ",".join(["?"] * len(removed_refs))
+        rows = db.execute(
+            f"SELECT id FROM concepts WHERE chapter = ? AND rule_ref IN ({placeholders})",
+            [chapter, *removed_refs],
         ).fetchall()
-    }
-    to_delete = old_ids_in_chapter - new_ids
-
-    for cid in to_delete:
-        db.execute("DELETE FROM relations WHERE source_id = ? OR target_id = ?", (cid, cid))
-        db.execute("DELETE FROM concepts WHERE id = ?", (cid,))
+        for (cid,) in rows:
+            db.execute("DELETE FROM relations WHERE source_id = ? OR target_id = ?", (cid, cid))
+            db.execute("DELETE FROM concepts WHERE id = ?", (cid,))
 
     for c in new_concepts:
         for opt in ("rule_ref", "definition_en", "definition_cn", "chapter", "complexity", "design_notes"):
@@ -97,6 +106,15 @@ def merge_chapter(
         valid_relations,
     )
     db.commit()
+
+
+def collect_removed_refs(diff: dict) -> set[str]:
+    """Rule refs that were deleted in this version (present in old, absent in new)."""
+    refs: set[str] = set()
+    for change in diff.get("changes", []):
+        if change.get("old") and not change.get("new"):
+            refs.add(change["old"]["ruleNumber"])
+    return refs
 
 
 def replace_rule_texts(db: sqlite3.Connection, records: list[dict]) -> None:
@@ -188,8 +206,9 @@ def incremental_extract(prev_set: str, curr_set: str, force: bool = False) -> Pa
     diff = get_diff(prev_set, curr_set)
 
     affected_refs = collect_affected_refs(diff)
+    removed_refs = collect_removed_refs(diff)
     chapters_to_redo = affected_chapters(affected_refs)
-    print(f"  {len(affected_refs)} affected refs, {len(chapters_to_redo)} chapters to re-extract")
+    print(f"  {len(affected_refs)} affected refs ({len(removed_refs)} removed), {len(chapters_to_redo)} chapters to re-extract")
 
     if not chapters_to_redo:
         print(f"  No structural changes; just updating rule_texts")
@@ -213,7 +232,9 @@ def incremental_extract(prev_set: str, curr_set: str, force: bool = False) -> Pa
                 concepts, relations = extract_chapter(
                     entries, f"hist_{curr_set}_{chapter}", force=force,
                 )
-                merge_chapter(db, chapter, concepts, relations)
+                # Filter removed_refs to this chapter
+                chapter_removed = {r for r in removed_refs if derive_chapter(r) == chapter}
+                merge_chapter(db, chapter, concepts, relations, chapter_removed)
 
             replace_rule_texts(db, new_records)
         finally:
