@@ -53,30 +53,39 @@ https://github.com/user-attachments/assets/1845fb94-0d1a-441c-8128-c857514064fe
 - **Node.js 20+**
 - **Python 3.11+** (only if you want to re-run the parser)
 - **SQLite 3.35+** (included with macOS, most Linux distros)
+- **Git LFS** — required to fetch the 122 historical version databases (~420MB)
 
-### Quick start (pre-built database included)
+### Quick start (pre-built databases included via Git LFS)
 
-The generated `parser/data/concepts.db` is committed to the repo, so you can skip the parser and go straight to running the server + client.
+Both the current `parser/data/concepts.db` and the 122 historical version DBs (`parser/data/history/concept_dbs/*.db`, spanning Alpha 1993 → TMT 2026) are committed via Git LFS, so you can skip the expensive LLM extraction pipeline entirely.
 
 ```bash
-# 1. Clone the repo
+# 1. Install Git LFS (once per machine)
+brew install git-lfs && git lfs install
+# Or: apt install git-lfs / choco install git-lfs
+
+# 2. Clone the repo (LFS files download automatically)
 git clone https://github.com/silvery5d/MTGRuler.git
 cd MTGRuler
 
-# 2. Start the API server (terminal 1)
+# If you cloned before installing LFS, fetch the DBs explicitly:
+# git lfs pull
+
+# 3. Start the API server (terminal 1)
 cd server
 npm install
 npx tsx src/index.ts
 # → MTGRuler API server running on http://localhost:3001
+# →   Loaded 122 historical versions
 
-# 3. Start the client (terminal 2)
+# 4. Start the client (terminal 2)
 cd client
 npm install
 npm run dev
 # → VITE v8 ready at http://localhost:5173
 ```
 
-Open http://localhost:5173 in your browser. That's it.
+Open http://localhost:5173 in your browser. The History view will show the full complexity evolution from 1993 to 2026.
 
 ### Re-running the parser (optional)
 
