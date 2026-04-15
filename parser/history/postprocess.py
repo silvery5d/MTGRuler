@@ -111,6 +111,87 @@ def interpolate_concepts(versions: list[dict]) -> dict:
     return {"interpolated": total_inserts, "concepts_touched": concepts_interpolated}
 
 
+def interpolate_relations(versions: list[dict]) -> dict:
+    """For each (source, target, type) relation, fill gaps between first
+    and last occurrence (analogous to interpolate_concepts).
+
+    Only inserts a relation into a version if BOTH endpoints exist there.
+    """
+    existing = [v for v in versions if (CONCEPT_DBS_DIR / f"{v['set_code']}.db").exists()]
+    if len(existing) < 3:
+        return {"interpolated": 0, "relations_touched": 0}
+
+    print(f"  Scanning {len(existing)} versions for relation presence...")
+    # key = (source, target, type) → set of set_codes present in
+    presence: dict[tuple[str, str, str], set[str]] = {}
+    rel_data: dict[tuple[str, str, str], dict] = {}
+
+    for v in existing:
+        db_path = CONCEPT_DBS_DIR / f"{v['set_code']}.db"
+        conn = sqlite3.connect(db_path)
+        try:
+            rows = conn.execute(
+                "SELECT source_id, target_id, type, rule_ref, description FROM relations"
+            ).fetchall()
+            for r in rows:
+                key = (r[0], r[1], r[2])
+                presence.setdefault(key, set()).add(v["set_code"])
+                rel_data[key] = {
+                    "source_id": r[0], "target_id": r[1], "type": r[2],
+                    "rule_ref": r[3], "description": r[4],
+                }
+        finally:
+            conn.close()
+
+    # For each relation, find gaps and insert (only if both endpoints exist)
+    version_order = {v["set_code"]: i for i, v in enumerate(existing)}
+    total_inserts = 0
+    relations_interpolated = 0
+
+    for key, versions_with in presence.items():
+        if len(versions_with) < 2:
+            continue
+        indices = sorted(version_order[c] for c in versions_with)
+        first_idx, last_idx = indices[0], indices[-1]
+        gap_indices = [i for i in range(first_idx, last_idx + 1) if existing[i]["set_code"] not in versions_with]
+        if not gap_indices:
+            continue
+
+        r_data = rel_data[key]
+        src_id, tgt_id = r_data["source_id"], r_data["target_id"]
+        touched = False
+        for idx in gap_indices:
+            code = existing[idx]["set_code"]
+            db_path = CONCEPT_DBS_DIR / f"{code}.db"
+            conn = sqlite3.connect(db_path)
+            try:
+                # Both endpoints must exist in this version
+                src_exists = conn.execute("SELECT 1 FROM concepts WHERE id = ?", (src_id,)).fetchone()
+                tgt_exists = conn.execute("SELECT 1 FROM concepts WHERE id = ?", (tgt_id,)).fetchone()
+                if not (src_exists and tgt_exists):
+                    continue
+                # Skip if relation already there (shouldn't be, but safety)
+                exists = conn.execute(
+                    "SELECT 1 FROM relations WHERE source_id = ? AND target_id = ? AND type = ?",
+                    (src_id, tgt_id, r_data["type"]),
+                ).fetchone()
+                if exists:
+                    continue
+                conn.execute(
+                    "INSERT INTO relations (source_id, target_id, type, rule_ref, description) VALUES (:source_id, :target_id, :type, :rule_ref, :description)",
+                    r_data,
+                )
+                conn.commit()
+                total_inserts += 1
+                touched = True
+            finally:
+                conn.close()
+        if touched:
+            relations_interpolated += 1
+
+    return {"interpolated": total_inserts, "relations_touched": relations_interpolated}
+
+
 def collapse_multi_edges(versions: list[dict]) -> dict:
     """Between each (source, target) pair, keep only the highest-priority relation type."""
     priority_rank = {t: i for i, t in enumerate(RELATION_PRIORITY)}
@@ -154,7 +235,7 @@ def collapse_multi_edges(versions: list[dict]) -> dict:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--interpolate", action="store_true", help="Fill concept gaps across versions")
+    ap.add_argument("--interpolate", action="store_true", help="Fill concept AND relation gaps across versions")
     ap.add_argument("--collapse-edges", action="store_true", help="Keep only one relation type per node pair")
     ap.add_argument("--all", action="store_true", help="Run everything")
     args = ap.parse_args()
@@ -171,9 +252,13 @@ def main():
     print(f"Loaded {len(versions)} versions from index")
 
     if args.interpolate:
-        print("\n[1] Interpolating missing concepts across versions...")
+        print("\n[1a] Interpolating missing concepts across versions...")
         stats = interpolate_concepts(versions)
         print(f"  Inserted {stats['interpolated']} concept rows across {stats['concepts_touched']} concept ids")
+
+        print("\n[1b] Interpolating missing relations across versions...")
+        stats = interpolate_relations(versions)
+        print(f"  Inserted {stats['interpolated']} relation rows across {stats['relations_touched']} (src,tgt,type) keys")
 
     if args.collapse_edges:
         print("\n[2] Collapsing multi-edges between node pairs...")
