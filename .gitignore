@@ -14,10 +14,10 @@ client/dist/
 # Claude Code /export transcript dumps
 *-command-message*.txt
 
-# History pipeline data (large, regenerate via `python -m history.run_history_pipeline`)
+# History pipeline cache (regenerate via `python -m history.run_history_pipeline`)
 parser/data/history/versions/
 parser/data/history/diffs/
 parser/data/history/parsed/
-parser/data/history/concept_dbs/
+# concept_dbs tracked via Git LFS (required to run the app)
 parser/data/history/validation_report.json
 parser/data/history/llm_validation_report.json
