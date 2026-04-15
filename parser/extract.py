@@ -95,7 +95,8 @@ def _call_llm(entries: list[dict], chapter: str, model: str) -> tuple[list[dict]
                 message = stream.get_final_message()
             break
         except Exception as e:
-            wait = 2 ** attempt
+            is_overloaded = "Overloaded" in type(e).__name__ or "529" in str(e)
+            wait = (30 * (attempt + 1)) if is_overloaded else 2 ** attempt
             print(f"  WARN: chapter {chapter} network attempt {attempt + 1}/4 failed ({type(e).__name__}), retrying in {wait}s...", flush=True)
             time.sleep(wait)
     if message is None:

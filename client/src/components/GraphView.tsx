@@ -1,13 +1,17 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type cytoscape from "cytoscape";
-import { defaultStylesheet } from "../styles/cytoscape.js";
+import { defaultStylesheet, COMPLEXITY_COLORS } from "../styles/cytoscape.js";
+import type { ColorMode } from "../hooks/useGraph.js";
 
 interface GraphViewProps {
   elements: cytoscape.ElementDefinition[];
   onNodeClick: (nodeId: string) => void;
   highlightedNodes?: Set<string>;
   highlightedEdges?: Set<string>;
+  colorMode?: ColorMode;
+  onColorModeChange?: (mode: ColorMode) => void;
+  focusNodeId?: string | null;
 }
 
 interface EdgeIndicator {
@@ -23,11 +27,24 @@ export function GraphView({
   onNodeClick,
   highlightedNodes,
   highlightedEdges,
+  colorMode = "type",
+  onColorModeChange,
+  focusNodeId,
 }: GraphViewProps) {
   const onNodeClickRef = useRef(onNodeClick);
   onNodeClickRef.current = onNodeClick;
   const cyRef = useRef<cytoscape.Core | null>(null);
   const [edgeIndicators, setEdgeIndicators] = useState<EdgeIndicator[]>([]);
+
+  // Extract the node-highlight logic so it can be called both on tap
+  // and imperatively (via focusNodeId from search results).
+  const highlightNeighborsRef = useRef<((nodeId: string) => void) | null>(null);
+
+  useEffect(() => {
+    if (focusNodeId && highlightNeighborsRef.current) {
+      highlightNeighborsRef.current(focusNodeId);
+    }
+  }, [focusNodeId]);
 
   const handleCy = useCallback(
     (cy: cytoscape.Core) => {
@@ -38,11 +55,7 @@ export function GraphView({
       if (!cyAny._listenersAttached) {
         cyAny._listenersAttached = true;
 
-        cy.on("tap", "node", (evt) => {
-          const node = evt.target;
-          onNodeClickRef.current(node.id());
-
-          // Highlight neighbors
+        const highlightNode = (node: cytoscape.NodeSingular) => {
           cy.batch(() => {
             cy.elements().addClass("dimmed").removeClass("neighbor-highlight");
             node.removeClass("dimmed").addClass("highlighted");
@@ -50,10 +63,34 @@ export function GraphView({
             connectedEdges.removeClass("dimmed").addClass("neighbor-highlight");
             const neighbors = node.neighborhood("node");
             neighbors.removeClass("dimmed").addClass("neighbor-highlight");
-          });
 
-          // Compute edge indicators for off-screen neighbors
+            cy.nodes().forEach((n) => {
+              if (n.hasClass("dimmed")) {
+                n.ungrabify();
+                n.unselectify();
+              } else {
+                n.grabify();
+                n.selectify();
+              }
+            });
+          });
           updateEdgeIndicators(cy, node);
+        };
+
+        // Expose to parent via ref so focusNodeId effect can invoke it
+        highlightNeighborsRef.current = (nodeId: string) => {
+          const n = cy.getElementById(nodeId);
+          if (!n.nonempty() || !n.isNode()) return;
+          highlightNode(n as cytoscape.NodeSingular);
+          cyAny._selectedNode = n;
+          // Center view on the focused node
+          cy.animate({ center: { eles: n }, duration: 300 });
+        };
+
+        cy.on("tap", "node", (evt) => {
+          const node = evt.target;
+          onNodeClickRef.current(node.id());
+          highlightNode(node);
         });
 
         // Click anything that's not a node → clear selection
@@ -61,6 +98,8 @@ export function GraphView({
           if (evt.target === cy || evt.target.isEdge()) {
             cy.batch(() => {
               cy.elements().removeClass("dimmed highlighted neighbor-highlight");
+              // Restore interactivity on all nodes
+              cy.nodes().grabify().selectify();
             });
             setEdgeIndicators([]);
           }
@@ -222,6 +261,33 @@ export function GraphView({
 
   return (
     <div className="flex-1 relative min-w-0 overflow-hidden">
+      {onColorModeChange && (
+        <div className="absolute top-2 right-2 z-30 flex items-center gap-2 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 px-2 py-1 text-xs">
+          <span className="text-gray-400">Color:</span>
+          <button
+            onClick={() => onColorModeChange("type")}
+            className={`px-2 py-0.5 rounded ${colorMode === "type" ? "bg-indigo-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
+          >
+            By Type
+          </button>
+          <button
+            onClick={() => onColorModeChange("complexity")}
+            className={`px-2 py-0.5 rounded ${colorMode === "complexity" ? "bg-indigo-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
+          >
+            By Complexity
+          </button>
+          {colorMode === "complexity" && (
+            <div className="flex items-center gap-1 ml-2 border-l border-gray-700 pl-2">
+              {COMPLEXITY_COLORS.map((c, i) => (
+                <div key={i} className="flex items-center gap-0.5">
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: c }} />
+                  <span className="text-gray-400">{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {elements.length === 0 ? (
         <div className="flex items-center justify-center h-full text-gray-400">
           Loading graph...

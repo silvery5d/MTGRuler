@@ -41,13 +41,19 @@ export function useHistory() {
       api.getHistorySpikes(),
     ])
       .then(([versions, metrics, spikes]) => {
+        // Only versions that exist in metrics have DBs server-side
+        const metricsSet = new Set(metrics.map((m) => m.set_code));
+        const loadable = versions.filter((v) => metricsSet.has(v.set_code));
+        const defaultVersion = loadable.length > 0
+          ? loadable[loadable.length - 1].set_code
+          : null;
         setState((s) => ({
           ...s,
-          versions,
+          versions: loadable.length > 0 ? loadable : versions,
           metrics,
           spikes,
           loading: false,
-          selectedVersion: versions.length > 0 ? versions[versions.length - 1].set_code : null,
+          selectedVersion: defaultVersion,
         }));
       })
       .catch((e) => {

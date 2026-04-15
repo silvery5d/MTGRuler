@@ -5,10 +5,8 @@ import { DetailPanel } from "./components/DetailPanel.js";
 import { PathQuery } from "./components/PathQuery.js";
 import { StatusBar } from "./components/StatusBar.js";
 import { ViewSwitcher } from "./components/ViewSwitcher.js";
-import { HeatMap } from "./components/DesignerView/HeatMap.js";
 import { ChapterOverview } from "./components/DesignerView/ChapterOverview.js";
 import { InteractionMatrix } from "./components/DesignerView/InteractionMatrix.js";
-import { DependencyGraph } from "./components/DesignerView/DependencyGraph.js";
 import { HistoryView } from "./components/HistoryView/HistoryView.js";
 import { useGraph } from "./hooks/useGraph.js";
 import { useSearch } from "./hooks/useSearch.js";
@@ -20,10 +18,11 @@ export default function App() {
   const search = useSearch();
   const [pathMode, setPathMode] = useState(false);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
 
   // Load initial graph + stats
   useEffect(() => {
-    graph.loadGraph({ chapter: "4" }); // Start small — chapter 4 (zones)
+    graph.loadGraph();
     api.getStats().then(setStats);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -48,7 +47,10 @@ export default function App() {
   const handleSearchResultClick = useCallback(
     (conceptId: string) => {
       graph.selectConcept(conceptId);
-      graph.loadGraph({ center: conceptId, depth: "2" });
+      graph.setViewMode("graph");
+      // Force a new ref identity to retrigger focus even if same id
+      setFocusNodeId(null);
+      setTimeout(() => setFocusNodeId(conceptId), 0);
     },
     [graph],
   );
@@ -77,14 +79,10 @@ export default function App() {
 
   const renderView = () => {
     switch (graph.viewMode) {
-      case "heatmap":
-        return <HeatMap graphData={graph.graphData} onNodeClick={handleNodeClick} />;
       case "chapter-overview":
         return <ChapterOverview onChapterClick={handleChapterClick} />;
       case "interaction-matrix":
         return <InteractionMatrix onConceptClick={handleNodeClick} />;
-      case "dependency":
-        return <DependencyGraph onNodeClick={handleNodeClick} />;
       case "history":
         return <HistoryView />;
       default:
@@ -94,6 +92,9 @@ export default function App() {
             onNodeClick={handleNodeClick}
             highlightedNodes={pathHighlightedNodes}
             highlightedEdges={pathHighlightedEdges}
+            colorMode={graph.colorMode}
+            onColorModeChange={graph.setColorMode}
+            focusNodeId={focusNodeId}
           />
         );
     }

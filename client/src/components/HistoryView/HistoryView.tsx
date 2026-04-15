@@ -63,11 +63,14 @@ export function HistoryView() {
         )}
         {h.subView === "diff" && (
           <DiffCompare
+            versions={h.versions}
             oldCode={h.compareVersion}
-            newCode={h.selectedVersion}
+            newCode={h.compareVersion ? h.selectedVersion : null}
             oldGraph={h.compareGraph}
             newGraph={h.selectedGraph}
             diff={h.diff}
+            loading={h.loading}
+            onCompare={h.compareVersions}
           />
         )}
       </div>

@@ -2,8 +2,6 @@ import type { ViewMode } from "../types/index.js";
 
 const VIEW_OPTIONS: { value: ViewMode; label: string }[] = [
   { value: "graph", label: "Graph View" },
-  { value: "dependency", label: "Dependency Graph" },
-  { value: "heatmap", label: "Complexity Heatmap" },
   { value: "chapter-overview", label: "Chapter Overview" },
   { value: "interaction-matrix", label: "Interaction Matrix" },
   { value: "history", label: "History (Complexity Evolution)" },

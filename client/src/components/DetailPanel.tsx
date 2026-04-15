@@ -42,7 +42,7 @@ export function DetailPanel({ detail, onClose, onConceptClick }: DetailPanelProp
         )}
       </div>
 
-      {(concept.complexity || concept.design_notes) && (
+      {(concept.complexity || concept.understanding_complexity || concept.design_notes) && (
         <div className="p-4 border-b border-gray-700">
           {concept.complexity && (
             <div className="flex items-center gap-2 mb-2">
@@ -58,6 +58,14 @@ export function DetailPanel({ detail, onClose, onConceptClick }: DetailPanelProp
                   />
                 ))}
               </div>
+            </div>
+          )}
+          {concept.understanding_complexity != null && (
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-sm text-gray-400">理解复杂度:</span>
+              <span className="text-sm font-mono text-amber-400">
+                {concept.understanding_complexity}
+              </span>
             </div>
           )}
           {concept.design_notes && (

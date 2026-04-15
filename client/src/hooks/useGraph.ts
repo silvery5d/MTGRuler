@@ -1,7 +1,9 @@
 import { useState, useCallback } from "react";
 import type { GraphData, ConceptDetail, PathResult, ViewMode } from "../types/index.js";
-import { NODE_COLORS } from "../styles/cytoscape.js";
+import { NODE_COLORS, COMPLEXITY_COLORS } from "../styles/cytoscape.js";
 import { api } from "../services/api.js";
+
+export type ColorMode = "type" | "complexity";
 
 export interface GraphState {
   graphData: GraphData | null;
@@ -11,6 +13,7 @@ export interface GraphState {
   error: string | null;
   viewMode: ViewMode;
   filters: { chapter?: string; type?: string };
+  colorMode: ColorMode;
 }
 
 export function useGraph() {
@@ -22,6 +25,7 @@ export function useGraph() {
     error: null,
     viewMode: "graph",
     filters: {},
+    colorMode: "type",
   });
 
   const setLoading = (loading: boolean) => setState((s) => ({ ...s, loading }));
@@ -72,18 +76,32 @@ export function useGraph() {
     setState((s) => ({ ...s, filters }));
   }, []);
 
+  const setColorMode = useCallback((colorMode: ColorMode) => {
+    setState((s) => ({ ...s, colorMode }));
+  }, []);
+
   // Convert GraphData to Cytoscape elements
   const cytoscapeElements = state.graphData
     ? [
-        ...state.graphData.nodes.map((n) => ({
-          data: {
-            id: n.id,
-            label: n.name_cn || n.name_en,
-            color: NODE_COLORS[n.type] || "#6b7280",
-            size: 8 + (n.complexity ?? 2) * 3,
-            nodeType: n.type,
-          },
-        })),
+        ...state.graphData.nodes.map((n) => {
+          const color =
+            state.colorMode === "complexity"
+              ? COMPLEXITY_COLORS[Math.max(0, Math.min(4, (n.complexity ?? 1) - 1))]
+              : NODE_COLORS[n.type] || "#6b7280";
+          const size =
+            state.colorMode === "complexity"
+              ? 12 + (n.complexity ?? 2) * 5
+              : 8 + (n.complexity ?? 2) * 3;
+          return {
+            data: {
+              id: n.id,
+              label: n.name_cn || n.name_en,
+              color,
+              size,
+              nodeType: n.type,
+            },
+          };
+        }),
         ...state.graphData.edges.map((e) => ({
           data: {
             id: `${e.source}-${e.target}-${e.type}`,
@@ -106,5 +124,6 @@ export function useGraph() {
     clearPath,
     setViewMode,
     setFilters,
+    setColorMode,
   };
 }

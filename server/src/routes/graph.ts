@@ -2,13 +2,15 @@ import { Router } from "express";
 import type Database from "better-sqlite3";
 import type { GraphData, GraphNode, GraphEdge } from "../types.js";
 
+type UcCache = Map<string, number>;
+
 interface GraphParams {
   chapter?: string;
   center?: string;
   depth?: number;
 }
 
-export function getGraphData(db: Database.Database, params: GraphParams): GraphData {
+export function getGraphData(db: Database.Database, params: GraphParams, ucCache?: UcCache): GraphData {
   let nodeIds: Set<string>;
 
   if (params.center) {
@@ -47,9 +49,14 @@ export function getGraphData(db: Database.Database, params: GraphParams): GraphD
 
   const idList = [...nodeIds];
   const placeholders = idList.map(() => "?").join(",");
-  const nodes = db.prepare(
+  const rawNodes = db.prepare(
     `SELECT id, name_en, name_cn, type, complexity FROM concepts WHERE id IN (${placeholders})`,
   ).all(...idList) as GraphNode[];
+
+  const nodes = rawNodes.map((n) => ({
+    ...n,
+    understanding_complexity: ucCache?.get(n.id) ?? null,
+  }));
 
   const edges = db.prepare(
     `SELECT source_id AS source, target_id AS target, type FROM relations
@@ -59,7 +66,7 @@ export function getGraphData(db: Database.Database, params: GraphParams): GraphD
   return { nodes, edges };
 }
 
-export function createGraphRouter(db: Database.Database): Router {
+export function createGraphRouter(db: Database.Database, ucCache: UcCache): Router {
   const router = Router();
 
   router.get("/", (req, res) => {
@@ -68,7 +75,7 @@ export function createGraphRouter(db: Database.Database): Router {
       center: req.query.center as string | undefined,
       depth: req.query.depth ? parseInt(req.query.depth as string) : undefined,
     };
-    res.json(getGraphData(db, params));
+    res.json(getGraphData(db, params, ucCache));
   });
 
   return router;

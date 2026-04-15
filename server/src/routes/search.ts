@@ -2,6 +2,15 @@ import { Router } from "express";
 import type Database from "better-sqlite3";
 import type { Concept } from "../types.js";
 
+type UcCache = Map<string, number>;
+
+function augmentAll(concepts: Concept[], ucCache: UcCache): Concept[] {
+  return concepts.map((c) => ({
+    ...c,
+    understanding_complexity: ucCache.get(c.id) ?? null,
+  }));
+}
+
 /**
  * Rewrite a user search query so CJK Han characters are tokenizable by
  * SQLite FTS5's unicode61 tokenizer. The Phase 1 parser indexes CJK text
@@ -57,7 +66,7 @@ export function searchConcepts(
   }
 }
 
-export function createSearchRouter(db: Database.Database): Router {
+export function createSearchRouter(db: Database.Database, ucCache: UcCache): Router {
   const router = Router();
 
   router.get("/", (req, res) => {
@@ -67,7 +76,7 @@ export function createSearchRouter(db: Database.Database): Router {
       return;
     }
     const type = req.query.type as string | undefined;
-    res.json(searchConcepts(db, q, type));
+    res.json(augmentAll(searchConcepts(db, q, type), ucCache));
   });
 
   return router;

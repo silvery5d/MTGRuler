@@ -1,0 +1,856 @@
+[
+  {
+    "set_code": "ALPHA",
+    "set_name": "Alpha / Beta Rulebook",
+    "release_date": "1993-08-05",
+    "prev_set_code": null,
+    "next_set_code": "UNLIMITED"
+  },
+  {
+    "set_code": "UNLIMITED",
+    "set_name": "Unlimited Rulebook",
+    "release_date": "1993-12-01",
+    "prev_set_code": "ALPHA",
+    "next_set_code": "REVISED"
+  },
+  {
+    "set_code": "REVISED",
+    "set_name": "Revised Edition Rulebook",
+    "release_date": "1994-04-01",
+    "prev_set_code": "UNLIMITED",
+    "next_set_code": "5TH"
+  },
+  {
+    "set_code": "5TH",
+    "set_name": "Fifth Edition Rulebook",
+    "release_date": "1997-03-01",
+    "prev_set_code": "REVISED",
+    "next_set_code": "6ED"
+  },
+  {
+    "set_code": "6ED",
+    "set_name": "Classic Sixth Edition",
+    "release_date": "1999-04-28",
+    "prev_set_code": "5TH",
+    "next_set_code": "APC"
+  },
+  {
+    "set_code": "APC",
+    "set_name": "Apocalypse",
+    "release_date": "2001-06-04",
+    "prev_set_code": "6ED",
+    "next_set_code": "ODY"
+  },
+  {
+    "set_code": "ODY",
+    "set_name": "Odyssey",
+    "release_date": "2001-10-01",
+    "prev_set_code": "APC",
+    "next_set_code": "TOR"
+  },
+  {
+    "set_code": "TOR",
+    "set_name": "Torment",
+    "release_date": "2002-02-04",
+    "prev_set_code": "ODY",
+    "next_set_code": "ONS"
+  },
+  {
+    "set_code": "ONS",
+    "set_name": "Onslaught",
+    "release_date": "2002-10-07",
+    "prev_set_code": "TOR",
+    "next_set_code": "LGN"
+  },
+  {
+    "set_code": "LGN",
+    "set_name": "Legions",
+    "release_date": "2003-02-03",
+    "prev_set_code": "ONS",
+    "next_set_code": "SCG"
+  },
+  {
+    "set_code": "SCG",
+    "set_name": "Scourge",
+    "release_date": "2003-05-26",
+    "prev_set_code": "LGN",
+    "next_set_code": "8ED"
+  },
+  {
+    "set_code": "8ED",
+    "set_name": "Eighth Edition",
+    "release_date": "2003-07-28",
+    "prev_set_code": "SCG",
+    "next_set_code": "MRD"
+  },
+  {
+    "set_code": "MRD",
+    "set_name": "Mirrodin",
+    "release_date": "2003-10-02",
+    "prev_set_code": "8ED",
+    "next_set_code": "DST"
+  },
+  {
+    "set_code": "DST",
+    "set_name": "Darksteel",
+    "release_date": "2004-02-06",
+    "prev_set_code": "MRD",
+    "next_set_code": "5DN"
+  },
+  {
+    "set_code": "5DN",
+    "set_name": "Fifth Dawn",
+    "release_date": "2004-06-04",
+    "prev_set_code": "DST",
+    "next_set_code": "CHK"
+  },
+  {
+    "set_code": "CHK",
+    "set_name": "Champions of Kamigawa",
+    "release_date": "2004-10-01",
+    "prev_set_code": "5DN",
+    "next_set_code": "BOK"
+  },
+  {
+    "set_code": "BOK",
+    "set_name": "Betrayers of Kamigawa",
+    "release_date": "2005-02-04",
+    "prev_set_code": "CHK",
+    "next_set_code": "9ED"
+  },
+  {
+    "set_code": "9ED",
+    "set_name": "Ninth Edition",
+    "release_date": "2005-07-29",
+    "prev_set_code": "BOK",
+    "next_set_code": "RAV"
+  },
+  {
+    "set_code": "RAV",
+    "set_name": "Ravnica",
+    "release_date": "2005-10-07",
+    "prev_set_code": "9ED",
+    "next_set_code": "GPT"
+  },
+  {
+    "set_code": "GPT",
+    "set_name": "Guildpact",
+    "release_date": "2006-02-03",
+    "prev_set_code": "RAV",
+    "next_set_code": "DIS"
+  },
+  {
+    "set_code": "DIS",
+    "set_name": "Dissension",
+    "release_date": "2006-05-05",
+    "prev_set_code": "GPT",
+    "next_set_code": "CSP"
+  },
+  {
+    "set_code": "CSP",
+    "set_name": "Coldsnap",
+    "release_date": "2006-07-21",
+    "prev_set_code": "DIS",
+    "next_set_code": "TSP"
+  },
+  {
+    "set_code": "TSP",
+    "set_name": "Time Spiral",
+    "release_date": "2006-10-06",
+    "prev_set_code": "CSP",
+    "next_set_code": "PLC"
+  },
+  {
+    "set_code": "PLC",
+    "set_name": "Planar Chaos",
+    "release_date": "2007-02-02",
+    "prev_set_code": "TSP",
+    "next_set_code": "FUT"
+  },
+  {
+    "set_code": "FUT",
+    "set_name": "Future Sight",
+    "release_date": "2007-05-04",
+    "prev_set_code": "PLC",
+    "next_set_code": "10E"
+  },
+  {
+    "set_code": "10E",
+    "set_name": "Tenth Edition",
+    "release_date": "2007-07-13",
+    "prev_set_code": "FUT",
+    "next_set_code": "LRW"
+  },
+  {
+    "set_code": "LRW",
+    "set_name": "Lorwyn",
+    "release_date": "2007-10-12",
+    "prev_set_code": "10E",
+    "next_set_code": "MOR"
+  },
+  {
+    "set_code": "MOR",
+    "set_name": "Morningtide",
+    "release_date": "2008-02-01",
+    "prev_set_code": "LRW",
+    "next_set_code": "SHM"
+  },
+  {
+    "set_code": "SHM",
+    "set_name": "Shadowmoor",
+    "release_date": "2008-05-02",
+    "prev_set_code": "MOR",
+    "next_set_code": "EVE"
+  },
+  {
+    "set_code": "EVE",
+    "set_name": "Eventide",
+    "release_date": "2008-07-25",
+    "prev_set_code": "SHM",
+    "next_set_code": "ALA"
+  },
+  {
+    "set_code": "ALA",
+    "set_name": "Shards of Alara",
+    "release_date": "2008-10-03",
+    "prev_set_code": "EVE",
+    "next_set_code": "CON"
+  },
+  {
+    "set_code": "CON",
+    "set_name": "Conflux",
+    "release_date": "2009-02-06",
+    "prev_set_code": "ALA",
+    "next_set_code": "ARB"
+  },
+  {
+    "set_code": "ARB",
+    "set_name": "Alara Reborn",
+    "release_date": "2009-04-30",
+    "prev_set_code": "CON",
+    "next_set_code": "M10"
+  },
+  {
+    "set_code": "M10",
+    "set_name": "Magic 2010",
+    "release_date": "2009-07-17",
+    "prev_set_code": "ARB",
+    "next_set_code": "ZEN"
+  },
+  {
+    "set_code": "ZEN",
+    "set_name": "Zendikar",
+    "release_date": "2009-10-02",
+    "prev_set_code": "M10",
+    "next_set_code": "WWK"
+  },
+  {
+    "set_code": "WWK",
+    "set_name": "Worldwake",
+    "release_date": "2010-02-05",
+    "prev_set_code": "ZEN",
+    "next_set_code": "ROE"
+  },
+  {
+    "set_code": "ROE",
+    "set_name": "Rise of the Eldrazi",
+    "release_date": "2010-04-23",
+    "prev_set_code": "WWK",
+    "next_set_code": "M11"
+  },
+  {
+    "set_code": "M11",
+    "set_name": "Magic 2011",
+    "release_date": "2010-07-16",
+    "prev_set_code": "ROE",
+    "next_set_code": "SOM"
+  },
+  {
+    "set_code": "SOM",
+    "set_name": "Scars of Mirrodin",
+    "release_date": "2010-10-01",
+    "prev_set_code": "M11",
+    "next_set_code": "MBS"
+  },
+  {
+    "set_code": "MBS",
+    "set_name": "Mirrodin Besieged",
+    "release_date": "2011-02-04",
+    "prev_set_code": "SOM",
+    "next_set_code": "NPH"
+  },
+  {
+    "set_code": "NPH",
+    "set_name": "New Phyrexia",
+    "release_date": "2011-05-13",
+    "prev_set_code": "MBS",
+    "next_set_code": "M12"
+  },
+  {
+    "set_code": "M12",
+    "set_name": "Magic 2012",
+    "release_date": "2011-07-15",
+    "prev_set_code": "NPH",
+    "next_set_code": "ISD"
+  },
+  {
+    "set_code": "ISD",
+    "set_name": "Innistrad",
+    "release_date": "2011-09-30",
+    "prev_set_code": "M12",
+    "next_set_code": "DKA"
+  },
+  {
+    "set_code": "DKA",
+    "set_name": "Dark Ascension",
+    "release_date": "2012-02-03",
+    "prev_set_code": "ISD",
+    "next_set_code": "AVR"
+  },
+  {
+    "set_code": "AVR",
+    "set_name": "Avacyn Restored",
+    "release_date": "2012-05-04",
+    "prev_set_code": "DKA",
+    "next_set_code": "M13"
+  },
+  {
+    "set_code": "M13",
+    "set_name": "Magic 2013",
+    "release_date": "2012-07-13",
+    "prev_set_code": "AVR",
+    "next_set_code": "RTR"
+  },
+  {
+    "set_code": "RTR",
+    "set_name": "Return to Ravnica",
+    "release_date": "2012-10-05",
+    "prev_set_code": "M13",
+    "next_set_code": "GTC"
+  },
+  {
+    "set_code": "GTC",
+    "set_name": "Gatecrash",
+    "release_date": "2013-02-01",
+    "prev_set_code": "RTR",
+    "next_set_code": "DGM"
+  },
+  {
+    "set_code": "DGM",
+    "set_name": "Dragon's Maze",
+    "release_date": "2013-05-03",
+    "prev_set_code": "GTC",
+    "next_set_code": "M14"
+  },
+  {
+    "set_code": "M14",
+    "set_name": "Magic 2014",
+    "release_date": "2013-07-19",
+    "prev_set_code": "DGM",
+    "next_set_code": "THS"
+  },
+  {
+    "set_code": "THS",
+    "set_name": "Theros",
+    "release_date": "2013-09-27",
+    "prev_set_code": "M14",
+    "next_set_code": "BNG"
+  },
+  {
+    "set_code": "BNG",
+    "set_name": "Born of the Gods",
+    "release_date": "2014-02-07",
+    "prev_set_code": "THS",
+    "next_set_code": "JOU"
+  },
+  {
+    "set_code": "JOU",
+    "set_name": "Journey into Nyx",
+    "release_date": "2014-05-02",
+    "prev_set_code": "BNG",
+    "next_set_code": "M15"
+  },
+  {
+    "set_code": "M15",
+    "set_name": "Magic 2015",
+    "release_date": "2014-07-18",
+    "prev_set_code": "JOU",
+    "next_set_code": "KTK"
+  },
+  {
+    "set_code": "KTK",
+    "set_name": "Khans of Tarkir",
+    "release_date": "2014-09-26",
+    "prev_set_code": "M15",
+    "next_set_code": "FRF"
+  },
+  {
+    "set_code": "FRF",
+    "set_name": "Fate Reforged",
+    "release_date": "2015-01-23",
+    "prev_set_code": "KTK",
+    "next_set_code": "DTK"
+  },
+  {
+    "set_code": "DTK",
+    "set_name": "Dragons of Tarkir",
+    "release_date": "2015-03-27",
+    "prev_set_code": "FRF",
+    "next_set_code": "ORI"
+  },
+  {
+    "set_code": "ORI",
+    "set_name": "Magic Origins",
+    "release_date": "2015-07-17",
+    "prev_set_code": "DTK",
+    "next_set_code": "BFZ"
+  },
+  {
+    "set_code": "BFZ",
+    "set_name": "Battle for Zendikar",
+    "release_date": "2015-10-02",
+    "prev_set_code": "ORI",
+    "next_set_code": "OGW"
+  },
+  {
+    "set_code": "OGW",
+    "set_name": "Oath of the Gatewatch",
+    "release_date": "2016-01-22",
+    "prev_set_code": "BFZ",
+    "next_set_code": "SOI"
+  },
+  {
+    "set_code": "SOI",
+    "set_name": "Shadows over Innistrad",
+    "release_date": "2016-04-08",
+    "prev_set_code": "OGW",
+    "next_set_code": "EMN"
+  },
+  {
+    "set_code": "EMN",
+    "set_name": "Eldritch Moon",
+    "release_date": "2016-07-22",
+    "prev_set_code": "SOI",
+    "next_set_code": "KLD"
+  },
+  {
+    "set_code": "KLD",
+    "set_name": "Kaladesh",
+    "release_date": "2016-09-30",
+    "prev_set_code": "EMN",
+    "next_set_code": "AER"
+  },
+  {
+    "set_code": "AER",
+    "set_name": "Aether Revolt",
+    "release_date": "2017-01-20",
+    "prev_set_code": "KLD",
+    "next_set_code": "AKH"
+  },
+  {
+    "set_code": "AKH",
+    "set_name": "Amonkhet",
+    "release_date": null,
+    "prev_set_code": "AER",
+    "next_set_code": "CMA"
+  },
+  {
+    "set_code": "CMA",
+    "set_name": "Commander Anthology",
+    "release_date": "2017-06-05",
+    "prev_set_code": "AKH",
+    "next_set_code": "HOU"
+  },
+  {
+    "set_code": "HOU",
+    "set_name": "Hour of Devastation",
+    "release_date": "2017-07-08",
+    "prev_set_code": "CMA",
+    "next_set_code": "C17"
+  },
+  {
+    "set_code": "C17",
+    "set_name": "Commander 2017",
+    "release_date": "2017-08-25",
+    "prev_set_code": "HOU",
+    "next_set_code": "XLN"
+  },
+  {
+    "set_code": "XLN",
+    "set_name": "Ixalan",
+    "release_date": "2017-09-29",
+    "prev_set_code": "C17",
+    "next_set_code": "RIX"
+  },
+  {
+    "set_code": "RIX",
+    "set_name": "Rivals of Ixalan",
+    "release_date": "2018-01-19",
+    "prev_set_code": "XLN",
+    "next_set_code": "DOM"
+  },
+  {
+    "set_code": "DOM",
+    "set_name": "Dominaria",
+    "release_date": "2018-04-27",
+    "prev_set_code": "RIX",
+    "next_set_code": "BBD"
+  },
+  {
+    "set_code": "BBD",
+    "set_name": "Battlebond",
+    "release_date": "2018-06-08",
+    "prev_set_code": "DOM",
+    "next_set_code": "M19"
+  },
+  {
+    "set_code": "M19",
+    "set_name": "Core Set 2019",
+    "release_date": "2018-07-13",
+    "prev_set_code": "BBD",
+    "next_set_code": "GRN"
+  },
+  {
+    "set_code": "GRN",
+    "set_name": "Guilds of Ravnica",
+    "release_date": "2018-10-05",
+    "prev_set_code": "M19",
+    "next_set_code": "RNA"
+  },
+  {
+    "set_code": "RNA",
+    "set_name": "Ravnica Allegiance",
+    "release_date": "2019-01-25",
+    "prev_set_code": "GRN",
+    "next_set_code": "WAR"
+  },
+  {
+    "set_code": "WAR",
+    "set_name": "War of the Spark",
+    "release_date": "2019-05-03",
+    "prev_set_code": "RNA",
+    "next_set_code": "MH1"
+  },
+  {
+    "set_code": "MH1",
+    "set_name": "Modern Horizons",
+    "release_date": "2019-06-14",
+    "prev_set_code": "WAR",
+    "next_set_code": "M20"
+  },
+  {
+    "set_code": "M20",
+    "set_name": "Core Set 2020",
+    "release_date": "2019-07-12",
+    "prev_set_code": "MH1",
+    "next_set_code": "C19"
+  },
+  {
+    "set_code": "C19",
+    "set_name": "Commander 2019",
+    "release_date": "2019-08-23",
+    "prev_set_code": "M20",
+    "next_set_code": "ELD"
+  },
+  {
+    "set_code": "ELD",
+    "set_name": "Throne of Eldraine",
+    "release_date": "2019-10-04",
+    "prev_set_code": "C19",
+    "next_set_code": "THB"
+  },
+  {
+    "set_code": "THB",
+    "set_name": "Theros Beyond Death",
+    "release_date": "2020-01-24",
+    "prev_set_code": "ELD",
+    "next_set_code": "IKO"
+  },
+  {
+    "set_code": "IKO",
+    "set_name": "Ikoria",
+    "release_date": "2020-04-17",
+    "prev_set_code": "THB",
+    "next_set_code": "IKO_2"
+  },
+  {
+    "set_code": "IKO_2",
+    "set_name": "Companion Change",
+    "release_date": "2020-06-01",
+    "prev_set_code": "IKO",
+    "next_set_code": "M21"
+  },
+  {
+    "set_code": "M21",
+    "set_name": "Core Set 2021",
+    "release_date": "2020-07-03",
+    "prev_set_code": "IKO_2",
+    "next_set_code": "2XM"
+  },
+  {
+    "set_code": "2XM",
+    "set_name": "Double Masters",
+    "release_date": "2020-08-07",
+    "prev_set_code": "M21",
+    "next_set_code": "ZNR"
+  },
+  {
+    "set_code": "ZNR",
+    "set_name": "Zendikar Rising",
+    "release_date": "2020-09-25",
+    "prev_set_code": "2XM",
+    "next_set_code": "CMR"
+  },
+  {
+    "set_code": "CMR",
+    "set_name": "Commander Legends",
+    "release_date": "2020-11-20",
+    "prev_set_code": "ZNR",
+    "next_set_code": "KHM"
+  },
+  {
+    "set_code": "KHM",
+    "set_name": "Kaldheim",
+    "release_date": "2021-02-05",
+    "prev_set_code": "CMR",
+    "next_set_code": "KHM_2"
+  },
+  {
+    "set_code": "KHM_2",
+    "set_name": "Cascade Update",
+    "release_date": "2021-02-15",
+    "prev_set_code": "KHM",
+    "next_set_code": "STX"
+  },
+  {
+    "set_code": "STX",
+    "set_name": "Strixhaven",
+    "release_date": "2021-04-22",
+    "prev_set_code": "KHM_2",
+    "next_set_code": "MH2"
+  },
+  {
+    "set_code": "MH2",
+    "set_name": "Modern Horizons 2",
+    "release_date": "2021-06-18",
+    "prev_set_code": "STX",
+    "next_set_code": "AFR"
+  },
+  {
+    "set_code": "AFR",
+    "set_name": "Adventures in the Forgotten Realms",
+    "release_date": "2021-07-23",
+    "prev_set_code": "MH2",
+    "next_set_code": "MID"
+  },
+  {
+    "set_code": "MID",
+    "set_name": "Innistrad: Midnight Hunt",
+    "release_date": "2021-09-24",
+    "prev_set_code": "AFR",
+    "next_set_code": "VOW"
+  },
+  {
+    "set_code": "VOW",
+    "set_name": "Innistrad: Crimson Vow",
+    "release_date": "2021-11-15",
+    "prev_set_code": "MID",
+    "next_set_code": "NEO"
+  },
+  {
+    "set_code": "NEO",
+    "set_name": "Kamigawa: Neon Dynasty",
+    "release_date": "2022-02-18",
+    "prev_set_code": "VOW",
+    "next_set_code": "SNC"
+  },
+  {
+    "set_code": "SNC",
+    "set_name": "Streets of New Capenna",
+    "release_date": "2022-04-29",
+    "prev_set_code": "NEO",
+    "next_set_code": "CLB"
+  },
+  {
+    "set_code": "CLB",
+    "set_name": "Commander Legends: Battle for Baldur’s Gate",
+    "release_date": "2022-06-10",
+    "prev_set_code": "SNC",
+    "next_set_code": "2X2"
+  },
+  {
+    "set_code": "2X2",
+    "set_name": "Double Masters 2022",
+    "release_date": "2022-07-08",
+    "prev_set_code": "CLB",
+    "next_set_code": "DMU"
+  },
+  {
+    "set_code": "DMU",
+    "set_name": "Dominaria United",
+    "release_date": "2022-09-01",
+    "prev_set_code": "2X2",
+    "next_set_code": "UNF"
+  },
+  {
+    "set_code": "UNF",
+    "set_name": "Unfinity",
+    "release_date": "2022-10-10",
+    "prev_set_code": "DMU",
+    "next_set_code": "BRO"
+  },
+  {
+    "set_code": "BRO",
+    "set_name": "The Brothers’ War",
+    "release_date": "2022-11-15",
+    "prev_set_code": "UNF",
+    "next_set_code": "ONE"
+  },
+  {
+    "set_code": "ONE",
+    "set_name": "Phyrexia: All Will Be One",
+    "release_date": "2023-02-04",
+    "prev_set_code": "BRO",
+    "next_set_code": "MOM"
+  },
+  {
+    "set_code": "MOM",
+    "set_name": "March of the Machine",
+    "release_date": "2023-04-08",
+    "prev_set_code": "ONE",
+    "next_set_code": "LTR"
+  },
+  {
+    "set_code": "LTR",
+    "set_name": "The Lord of the Rings: Tales of Middle-earth",
+    "release_date": "2023-06-16",
+    "prev_set_code": "MOM",
+    "next_set_code": "WOE"
+  },
+  {
+    "set_code": "WOE",
+    "set_name": "Wilds of Eldraine",
+    "release_date": "2023-08-29",
+    "prev_set_code": "LTR",
+    "next_set_code": "WHO"
+  },
+  {
+    "set_code": "WHO",
+    "set_name": "Doctor Who",
+    "release_date": "2023-10-13",
+    "prev_set_code": "WOE",
+    "next_set_code": "LCI"
+  },
+  {
+    "set_code": "LCI",
+    "set_name": "The Lost Caverns of Ixalan",
+    "release_date": "2023-11-16",
+    "prev_set_code": "WHO",
+    "next_set_code": "MKM"
+  },
+  {
+    "set_code": "MKM",
+    "set_name": "Murders at Karlov Manor",
+    "release_date": "2024-02-07",
+    "prev_set_code": "LCI",
+    "next_set_code": "PIP"
+  },
+  {
+    "set_code": "PIP",
+    "set_name": "Fallout",
+    "release_date": "2024-03-06",
+    "prev_set_code": "MKM",
+    "next_set_code": "OTJ"
+  },
+  {
+    "set_code": "OTJ",
+    "set_name": "Outlaws of Thunder Junction",
+    "release_date": "2024-04-11",
+    "prev_set_code": "PIP",
+    "next_set_code": "MH3"
+  },
+  {
+    "set_code": "MH3",
+    "set_name": "Modern Horizons 3",
+    "release_date": "2024-06-11",
+    "prev_set_code": "OTJ",
+    "next_set_code": "BLB"
+  },
+  {
+    "set_code": "BLB",
+    "set_name": "Bloomburrow",
+    "release_date": "2024-08-05",
+    "prev_set_code": "MH3",
+    "next_set_code": "DSK"
+  },
+  {
+    "set_code": "DSK",
+    "set_name": "Duskmourn: House of Horror",
+    "release_date": "2024-09-18",
+    "prev_set_code": "BLB",
+    "next_set_code": "FDN"
+  },
+  {
+    "set_code": "FDN",
+    "set_name": "Foundations",
+    "release_date": "2024-11-08",
+    "prev_set_code": "DSK",
+    "next_set_code": "DFT"
+  },
+  {
+    "set_code": "DFT",
+    "set_name": "Aetherdrift",
+    "release_date": "2025-02-06",
+    "prev_set_code": "FDN",
+    "next_set_code": "TDM"
+  },
+  {
+    "set_code": "TDM",
+    "set_name": "Tarkir: Dragonstorm",
+    "release_date": "2025-04-03",
+    "prev_set_code": "DFT",
+    "next_set_code": "FIN"
+  },
+  {
+    "set_code": "FIN",
+    "set_name": "Final Fantasy",
+    "release_date": "2025-06-04",
+    "prev_set_code": "TDM",
+    "next_set_code": "EOE"
+  },
+  {
+    "set_code": "EOE",
+    "set_name": "Edge of Eternities",
+    "release_date": "2025-07-24",
+    "prev_set_code": "FIN",
+    "next_set_code": "SPM"
+  },
+  {
+    "set_code": "SPM",
+    "set_name": "Marvel's Spider-Man",
+    "release_date": "2025-09-17",
+    "prev_set_code": "EOE",
+    "next_set_code": "TLA"
+  },
+  {
+    "set_code": "TLA",
+    "set_name": "Avatar: The Last Airbender",
+    "release_date": "2025-11-18",
+    "prev_set_code": "SPM",
+    "next_set_code": "ECL"
+  },
+  {
+    "set_code": "ECL",
+    "set_name": "Lorwyn Eclipsed",
+    "release_date": "2026-01-22",
+    "prev_set_code": "TLA",
+    "next_set_code": "TMT"
+  },
+  {
+    "set_code": "TMT",
+    "set_name": "Teenage Mutant Ninja Turtles",
+    "release_date": "2026-02-23",
+    "prev_set_code": "ECL",
+    "next_set_code": null
+  }
+]

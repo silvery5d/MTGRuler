@@ -2,6 +2,16 @@ import { Router } from "express";
 import type Database from "better-sqlite3";
 import type { Concept, RuleText } from "../types.js";
 
+type UcCache = Map<string, number>;
+
+function augment(concept: Concept, ucCache: UcCache): Concept {
+  return { ...concept, understanding_complexity: ucCache.get(concept.id) ?? null };
+}
+
+function augmentAll(concepts: Concept[], ucCache: UcCache): Concept[] {
+  return concepts.map((c) => augment(c, ucCache));
+}
+
 interface ListParams {
   type?: string;
   chapter?: string;
@@ -97,7 +107,7 @@ export function getConceptNeighbors(
     .all(...ids) as Concept[];
 }
 
-export function createConceptsRouter(db: Database.Database): Router {
+export function createConceptsRouter(db: Database.Database, ucCache: UcCache): Router {
   const router = Router();
 
   router.get("/", (req, res) => {
@@ -109,7 +119,7 @@ export function createConceptsRouter(db: Database.Database): Router {
         ? parseInt(req.query.offset as string)
         : undefined,
     };
-    res.json(getConceptsList(db, params));
+    res.json(augmentAll(getConceptsList(db, params), ucCache));
   });
 
   router.get("/:id", (req, res) => {
@@ -118,12 +128,16 @@ export function createConceptsRouter(db: Database.Database): Router {
       res.status(404).json({ error: "Concept not found" });
       return;
     }
-    res.json(result);
+    res.json({
+      concept: augment(result.concept, ucCache),
+      rule_texts: result.rule_texts,
+      related: augmentAll(result.related, ucCache),
+    });
   });
 
   router.get("/:id/neighbors", (req, res) => {
     const depth = parseInt(req.query.depth as string) || 1;
-    res.json(getConceptNeighbors(db, req.params.id, depth));
+    res.json(augmentAll(getConceptNeighbors(db, req.params.id, depth), ucCache));
   });
 
   return router;
