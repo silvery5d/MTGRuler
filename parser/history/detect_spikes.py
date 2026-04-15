@@ -91,7 +91,7 @@ def find_spikes(metrics: list[dict]) -> list[dict]:
     return list(spikes_by_version.values())
 
 
-def _summarize_added_concepts(prev_set: str, curr_set: str, max_items: int = 30) -> list[dict]:
+def _summarize_added_concepts(prev_set: str, curr_set: str, max_items: int = 15) -> list[dict]:
     prev_db = CONCEPT_DBS_DIR / f"{prev_set}.db"
     curr_db = CONCEPT_DBS_DIR / f"{curr_set}.db"
     if not prev_db.exists() or not curr_db.exists():
@@ -114,7 +114,7 @@ def _summarize_added_concepts(prev_set: str, curr_set: str, max_items: int = 30)
         curr_conn.close()
 
 
-def _summarize_rule_diff(prev_set: str, curr_set: str, max_items: int = 30) -> str:
+def _summarize_rule_diff(prev_set: str, curr_set: str, max_items: int = 15) -> str:
     try:
         diff = fetch_diff(prev_set, curr_set)
     except Exception:
@@ -124,9 +124,9 @@ def _summarize_rule_diff(prev_set: str, curr_set: str, max_items: int = 30) -> s
         old = change.get("old")
         new = change.get("new")
         if old is None and new:
-            lines.append(f"  + {new['ruleNumber']}: {new['ruleText'][:200]}")
+            lines.append(f"  + {new['ruleNumber']}: {new['ruleText'][:120]}")
         elif new is None and old:
-            lines.append(f"  - {old['ruleNumber']}: {old['ruleText'][:200]}")
+            lines.append(f"  - {old['ruleNumber']}: {old['ruleText'][:120]}")
         elif old and new:
             lines.append(f"  ~ {new['ruleNumber']}: (modified)")
     return "\n".join(lines)
@@ -181,18 +181,50 @@ Respond ONLY with valid JSON, no markdown fences:
   "summary": "<one sentence>"
 }}"""
 
-    message = client.messages.create(
-        model=model,
-        max_tokens=2048,
-        messages=[{"role": "user", "content": user_prompt}],
-    )
-    raw = next((b.text for b in message.content if getattr(b, "type", None) == "text"), "")
+    import time
+    raw = ""
+    for attempt in range(3):
+        try:
+            message = client.messages.create(
+                model=model,
+                max_tokens=2048,
+                messages=[{"role": "user", "content": user_prompt}],
+            )
+            raw = next((b.text for b in message.content if getattr(b, "type", None) == "text"), "")
+            if raw.strip():
+                break
+            print(f"    WARN: empty response for {spike['set_code']} attempt {attempt + 1}/3, retrying...")
+            time.sleep(2 * (attempt + 1))
+        except Exception as e:
+            print(f"    WARN: LLM error for {spike['set_code']} ({type(e).__name__}), retry {attempt + 1}/3")
+            time.sleep(2 * (attempt + 1))
+
+    # Strip markdown fences
     cleaned = re.sub(r"^```(?:json)?\s*\n?", "", raw.strip())
     cleaned = re.sub(r"\n?```\s*$", "", cleaned)
+
+    # Extract just the outermost JSON object (LLMs sometimes add prose before/after)
+    start = cleaned.find("{")
+    end = cleaned.rfind("}")
+    if start >= 0 and end > start:
+        cleaned = cleaned[start : end + 1]
+
     try:
         return json.loads(cleaned)
-    except json.JSONDecodeError:
-        return {"primary_culprits": [], "secondary_factors": [], "summary": "(analysis failed to parse)"}
+    except json.JSONDecodeError as e:
+        # Retry with trailing commas stripped
+        try:
+            retry = re.sub(r",(\s*[}\]])", r"\1", cleaned)
+            return json.loads(retry)
+        except json.JSONDecodeError:
+            pass
+        print(f"    WARN: JSON parse failed for {spike['set_code']} ({e}). Raw response first 300 chars: {raw[:300]!r}")
+        return {
+            "primary_culprits": [],
+            "secondary_factors": [],
+            "summary": "(analysis failed to parse)",
+            "_raw_response": raw[:2000],
+        }
 
 
 def detect_and_analyze(metrics: list[dict], force: bool = False) -> list[dict]:

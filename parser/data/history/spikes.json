@@ -1,1 +1,1509 @@
-[]
+[
+  {
+    "set_code": "APC",
+    "set_name": "Apocalypse",
+    "release_date": "2001-06-04",
+    "prev_set_code": "6ED",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.3699,
+        "abs": 128.0
+      },
+      "graph.concept_count": {
+        "pct": 0.6667,
+        "abs": 76.0
+      },
+      "graph.relation_count": {
+        "pct": 0.9504,
+        "abs": 115.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.6086,
+        "abs": 185.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.4667,
+        "abs": 7.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+37% rule_count, +67% concept_count, +95% relation_count, +61% uc_total, +47% keyword_count"
+  },
+  {
+    "set_code": "8ED",
+    "set_name": "Eighth Edition",
+    "release_date": "2003-07-28",
+    "prev_set_code": "SCG",
+    "spiked_metrics": [
+      "scale.rule_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.2588,
+        "abs": 133.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+26% rule_count"
+  },
+  {
+    "set_code": "MRD",
+    "set_name": "Mirrodin",
+    "release_date": "2003-10-02",
+    "prev_set_code": "8ED",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.0634,
+        "abs": 41.0
+      },
+      "graph.concept_count": {
+        "pct": 0.1906,
+        "abs": 61.0
+      },
+      "graph.relation_count": {
+        "pct": 0.221,
+        "abs": 99.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.172,
+        "abs": 151.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1471,
+        "abs": 5.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+6% rule_count, +19% concept_count, +22% relation_count, +17% uc_total, +15% keyword_count"
+  },
+  {
+    "set_code": "CHK",
+    "set_name": "Champions of Kamigawa",
+    "release_date": "2004-10-01",
+    "prev_set_code": "5DN",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "graph.concept_count",
+      "graph.relation_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.0535,
+        "abs": 37.0
+      },
+      "graph.concept_count": {
+        "pct": 0.0738,
+        "abs": 29.0
+      },
+      "graph.relation_count": {
+        "pct": 0.1512,
+        "abs": 93.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.2889,
+        "abs": 13.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+5% rule_count, +7% concept_count, +15% relation_count, +29% keyword_count"
+  },
+  {
+    "set_code": "RAV",
+    "set_name": "Ravnica",
+    "release_date": "2005-10-07",
+    "prev_set_code": "9ED",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.2198,
+        "abs": 162.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1429,
+        "abs": 8.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Type Change",
+          "type": "Mechanic",
+          "explanation": "Explicitly listed as a new MechanicPattern (complexity 3) that affects card types, subtypes, creature cards, and land types. This mechanic creates system-wide ripple effects because type-changing effects interact with targeting, protection, color-changing effects, and must be tracked across the entire ruleset. Ravnica introduced numerous cards that change creature types (e.g., through '[Card Name] becomes a [type]' effects or subtype modification).",
+          "affected_concepts": [
+            "concept.subtypes",
+            "concept.creature_card",
+            "concept.land_type",
+            "concept.card_types",
+            "cardtype.artifact_creature"
+          ],
+          "estimated_contribution_pct": 25
+        },
+        {
+          "name": "Multiplayer Variants (Emperor, Grand Melee, Two-Headed Giant)",
+          "type": "RuleSystem",
+          "explanation": "Ravnica introduced or formalized major multiplayer variants with high complexity scores (Emperor: 4, Grand Melee: 5, Two-Headed Giant: 4). These variants require entirely new attack direction rules, team coordination mechanics, and turn structure modifications that create recursive game-state interactions and must be integrated throughout the comprehensive rules.",
+          "affected_concepts": [
+            "concept.variant.emperor",
+            "concept.variant.grand_melee",
+            "concept.variant.two_headed_giant",
+            "concept.attack_left_right",
+            "concept.empr"
+          ],
+          "estimated_contribution_pct": 22
+        },
+        {
+          "name": "Guild Keyword Mechanics",
+          "type": "Keyword",
+          "explanation": "Ravnica's 10 guilds each introduced unique keywords (Haunt, Bloodthirst, Convoke, Dredge, Transmute, Replicate, Splice, Hellbent, Radiance, Devour) that introduced new game-state interactions. Many guild mechanics create triggered effects with complex resolution patterns (e.g., Haunt creating delayed triggered abilities, Convoke requiring distributed tapping decisions). The 14.3% keyword_count increase aligns with this guild keyword explosion.",
+          "affected_concepts": [
+            "concept.guild_icon"
+          ],
+          "estimated_contribution_pct": 20
+        },
+        {
+          "name": "Teams/Teammates Concept",
+          "type": "Mechanic",
+          "explanation": "Required supporting infrastructure for multiplayer variants, introducing new game-state relationships and interaction rules. Teammates creates permission rules (e.g., 'only you and your teammates can...'), shared knowledge considerations, and coordination restrictions that ripple across combat rules, targeting rules, and game state checks.",
+          "affected_concepts": [
+            "concept.variant.teams",
+            "concept.teammates"
+          ],
+          "estimated_contribution_pct": 15
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Artifact Creature Card Type",
+          "type": "RuleSystem",
+          "explanation": "The new hybrid card type requires all artifact rules to apply correctly when something becomes a creature, creating interaction complexity with auras, equipments, and type-changing effects. Added as explicit concept with complexity 2.",
+          "affected_concepts": [
+            "cardtype.artifact_creature"
+          ],
+          "estimated_contribution_pct": 8
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by multiplayer variants (Grand Melee, Emperor, Two-Headed Giant) introducing new attack/team interaction systems, guild keyword mechanics creating novel resolution patterns, and type-change effects creating system-wide rule interactions across the comprehensive rules."
+    },
+    "delta_summary": "+22% rule_count, +14% keyword_count"
+  },
+  {
+    "set_code": "FUT",
+    "set_name": "Future Sight",
+    "release_date": "2007-05-04",
+    "prev_set_code": "PLC",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.0906,
+        "abs": 89.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.2133,
+        "abs": 16.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+9% rule_count, +21% keyword_count"
+  },
+  {
+    "set_code": "M10",
+    "set_name": "Magic 2010",
+    "release_date": "2009-07-17",
+    "prev_set_code": "ARB",
+    "spiked_metrics": [
+      "scale.rule_count"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.2363,
+        "abs": 281.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+24% rule_count"
+  },
+  {
+    "set_code": "WWK",
+    "set_name": "Worldwake",
+    "release_date": "2010-02-05",
+    "prev_set_code": "ZEN",
+    "spiked_metrics": [
+      "scale.rule_count",
+      "graph.concept_count",
+      "cognitive.uc_total"
+    ],
+    "deltas": {
+      "scale.rule_count": {
+        "pct": 0.1136,
+        "abs": 167.0
+      },
+      "graph.concept_count": {
+        "pct": 0.0657,
+        "abs": 56.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.1307,
+        "abs": 327.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+11% rule_count, +7% concept_count, +13% uc_total"
+  },
+  {
+    "set_code": "ODY",
+    "set_name": "Odyssey",
+    "release_date": "2001-10-01",
+    "prev_set_code": "APC",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1737,
+        "abs": 33.0
+      },
+      "graph.relation_count": {
+        "pct": 0.2754,
+        "abs": 65.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.2761,
+        "abs": 135.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.5,
+        "abs": 11.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+17% concept_count, +28% relation_count, +28% uc_total, +50% keyword_count"
+  },
+  {
+    "set_code": "TOR",
+    "set_name": "Torment",
+    "release_date": "2002-02-04",
+    "prev_set_code": "ODY",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.157,
+        "abs": 35.0
+      },
+      "graph.relation_count": {
+        "pct": 0.1761,
+        "abs": 53.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.1362,
+        "abs": 85.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": "{\n  \"primary_culprits\": [\n    {\n      \"name\": \"Phasing\",\n      \"type\": \"Mechanic\",\n      \"explanation\": \"Phasing introduces an entirely new dimensional state (phased‑in / phased‑out) that applies to every permanent, interacts with layers, triggers, and state‑based actions, and can recursively affect other mechanics (e.g., banding, kicker, combat restrictions). The need to model phase transitions, timing windows, and cross‑mechanic interactions dramatically inflates both node and edge counts in the rule graph.\",\n      \"affected_concepts\": [\n        \"mechanic.phasing\",\n        \"concept.band\",\n        \"mechanic.attacking_restriction\",\n        \"mechanic.blocking_restriction\",\n        \"mechanic.kicker\"\n      ],\n      \"estimated_contribution_pct\": 30\n    },\n    {\n      \"name\": \"Band\",\n      \"type\": \"Concept\",\n      \"explanation\": \"Band (and its interaction with banding) creates a new grouping mechanism in combat, allowing multiple creatures to attack as a single entity and altering how damage is assigned and blocked. This mechanic introduces a host of new relational edges between creatures, players, and combat effects, and it reverberates through other subsystems such as blocking restrictions and damage distribution.\",\n      \"affected_concepts\": [\n        \"concept.band\",\n        \"mechanic.attacking_restriction\",\n        \"mechanic.blocking_restriction\",\n        \"mechanic.phasing\"\n      ],\n      \"estimated_contribution_pct\": 25\n    },\n    {\n      \"name\": \"Kicker\",\n      \"type\": \"Mechanic\",\n      \"explanation\": \"Kicker adds optional additional costs that create multi‑stage resolution paths for spells and abilities. Because kicked versions can generate unique triggers, modify costs, and interact with other cost‑based mechanics (e.g., buyback, echo), the rule graph gains many new conditional edges and state‑tracking nodes.\",\n      \"affected_concepts\": [\n        \"mechanic.kicker\",\n        \"mechanic.buyback\",\n        \"mechanic.echo\",\n        \"mechanic.fading\"\n      ],\n      \"est"
+    },
+    "delta_summary": "+16% concept_count, +18% relation_count, +14% uc_total"
+  },
+  {
+    "set_code": "LGN",
+    "set_name": "Legions",
+    "release_date": "2003-02-03",
+    "prev_set_code": "ONS",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1783,
+        "abs": 46.0
+      },
+      "graph.relation_count": {
+        "pct": 0.3305,
+        "abs": 117.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.2454,
+        "abs": 174.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Morph",
+          "type": "Keyword",
+          "explanation": "Introduces face‑down cards and optional actions, requiring new state checks for legality of attacks, blocks, targeting, and phase transitions, leading to a large increase in concept and relation counts.",
+          "affected_concepts": [
+            "concept.morph",
+            "concept.face_down",
+            "concept.optional_action",
+            "concept.legal_attack",
+            "concept.legal_block",
+            "concept.attack_requirement",
+            "concept.block_restriction",
+            "concept.block_requirement",
+            "concept.legal_target"
+          ],
+          "estimated_contribution_pct": 30
+        },
+        {
+          "name": "Double Strike",
+          "type": "Keyword",
+          "explanation": "Adds a new combat damage ordering rule, increasing the number of legal attack and block relations and requiring additional state checks for damage ordering.",
+          "affected_concepts": [
+            "keyword.double_strike",
+            "concept.legal_attack",
+            "concept.legal_block"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "State‑Based Effects",
+          "type": "RuleSystem",
+          "explanation": "Formalizes the evaluation of lethal damage, poison, and loss conditions after each spell or ability resolves, creating many new relationships among game state concepts.",
+          "affected_concepts": [
+            "concept.state_based_effects",
+            "concept.losing_from_life",
+            "concept.losing_from_poison",
+            "concept.losing_from_draw",
+            "concept.draw_game",
+            "concept.simultaneous_win_loss"
+          ],
+          "estimated_contribution_pct": 20
+        },
+        {
+          "name": "Poison Counters",
+          "type": "Mechanic",
+          "explanation": "Introduces a new win condition tied to poison counters, adding concepts for counters, loss from poison, and interactions with damage and lifelink.",
+          "affected_concepts": [
+            "counter.poison",
+            "concept.losing_from_poison",
+            "concept.losing_from_life"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Game Loop",
+          "type": "Mechanic",
+          "explanation": "Cards that create recursive loops require the rules engine to detect and resolve looping game states, expanding relation complexity.",
+          "affected_concepts": [
+            "mechanic.game_loop",
+            "concept.state_based_effects"
+          ],
+          "estimated_contribution_pct": 10
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Amplify",
+          "type": "Keyword",
+          "explanation": "Adds interactions based on creature type detection, modestly increasing concept count.",
+          "affected_concepts": [
+            "keyword.amplify"
+          ],
+          "estimated_contribution_pct": 5
+        },
+        {
+          "name": "Provoke",
+          "type": "Keyword",
+          "explanation": "Creates forced block decisions, adding a few new legal block and attack requirement relations.",
+          "affected_concepts": [
+            "keyword.provoke"
+          ],
+          "estimated_contribution_pct": 5
+        },
+        {
+          "name": "Fear",
+          "type": "Keyword",
+          "explanation": "Introduces a restriction on block legality, modestly increasing block restriction concepts.",
+          "affected_concepts": [
+            "keyword.fear"
+          ],
+          "estimated_contribution_pct": 5
+        }
+      ],
+      "summary": "The complexity spike is driven primarily by Morph and its face‑down/optional‑action rules, Double Strike combat rules, formalization of State‑Based Effects, the new Poison‑counter win condition, and recursive Game‑Loop mechanics, which together account for the majority of the new concepts and relations."
+    },
+    "delta_summary": "+18% concept_count, +33% relation_count, +25% uc_total"
+  },
+  {
+    "set_code": "9ED",
+    "set_name": "Ninth Edition",
+    "release_date": "2005-07-29",
+    "prev_set_code": "BOK",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1224,
+        "abs": 54.0
+      },
+      "graph.relation_count": {
+        "pct": 0.1125,
+        "abs": 81.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+12% concept_count, +11% relation_count"
+  },
+  {
+    "set_code": "PLC",
+    "set_name": "Planar Chaos",
+    "release_date": "2007-02-02",
+    "prev_set_code": "TSP",
+    "spiked_metrics": [
+      "graph.concept_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0647,
+        "abs": 37.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Zone Change System",
+          "type": "RuleSystem",
+          "explanation": "Introduces object_zone_change and zone_change_exception concepts that govern how cards and tokens move between zones, adding numerous interactions with replacement effects, triggers, and layer interactions. The complexity (4 and 5) creates recursive dependencies and cascading rule checks across the entire game state, causing a large increase in rule volume.",
+          "affected_concepts": [
+            "concept.object_zone_change",
+            "concept.zone_change_exception"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Card Type Change and Type Retention",
+          "type": "Mechanic",
+          "explanation": "The card_type_change concept (complexity 3) allows cards to change type lines, while supertype_retention, type_retention, and supertype_independence define how super- and subtypes are preserved or altered during those changes. These rules interact with a wide range of effects that reference card types and supertypes, producing system‑wide ripples.",
+          "affected_concepts": [
+            "concept.card_type_change",
+            "concept.supertype_retention",
+            "concept.type_retention",
+            "concept.supertype_independence"
+          ],
+          "estimated_contribution_pct": 30
+        },
+        {
+          "name": "Token Creation and Set‑Aside Zone",
+          "type": "Mechanic",
+          "explanation": "Tokens and the new set_aside zone introduce new game‑state objects that must be tracked, created, destroyed, and moved. The interaction of tokens with zone‑change rules adds additional recursive considerations and exception handling.",
+          "affected_concepts": [
+            "concept.tokens",
+            "concept.set_aside"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "Emperor and General Roles",
+          "type": "Keyword",
+          "explanation": "Introduces multiplayer role concepts that grant abilities to the Emperor and General, adding new layered effects and loyalty‑style interactions not present in previous sets. The role‑based mechanics require extra rule wording and interaction checks.",
+          "affected_concepts": [
+            "concept.emperor_role",
+            "concept.general_role"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Artifact Creature and Artifact Land Patterns",
+          "type": "Mechanic",
+          "explanation": "New mechanic patterns for artifact creatures and artifact lands expand the set of hybrid card types, requiring additional rule handling for artifact‑specific effects and interactions with type‑changing effects.",
+          "affected_concepts": [
+            "mechanic_pattern.artifact_creature",
+            "mechanic_pattern.artifact_land"
+          ],
+          "estimated_contribution_pct": 5
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Snow and World Supertypes",
+          "type": "Supertype",
+          "explanation": "While introducing new supertypes, their rules are relatively straightforward and add limited interaction complexity compared to zone‑change or type‑change mechanics.",
+          "affected_concepts": [
+            "supertype.snow",
+            "supertype.world"
+          ],
+          "estimated_contribution_pct": 0
+        },
+        {
+          "name": "Oracle Text, Illustration Credit, Legal Text, Collector Numbers",
+          "type": "Metadata",
+          "explanation": "These are informational concepts that do not affect game rules and thus contribute negligible complexity.",
+          "affected_concepts": [
+            "concept.oracle_text",
+            "concept.illustration_credit",
+            "concept.legal_text",
+            "concept.collector_numbers"
+          ],
+          "estimated_contribution_pct": 0
+        }
+      ],
+      "summary": "The bulk of the 6.5 % complexity spike in the MTG Comprehensive Rules from TSP to PLC stems from the new Zone‑Change rule system, followed by the Card‑Type‑Change/Retention subsystem, Token/Set‑Aside handling, and the Emperor/General role keywords, with minor contributions from artifact‑type patterns and negligible impact from metadata concepts."
+    },
+    "delta_summary": "+6% concept_count"
+  },
+  {
+    "set_code": "LRW",
+    "set_name": "Lorwyn",
+    "release_date": "2007-10-12",
+    "prev_set_code": "10E",
+    "spiked_metrics": [
+      "graph.concept_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0629,
+        "abs": 40.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+6% concept_count"
+  },
+  {
+    "set_code": "ZEN",
+    "set_name": "Zendikar",
+    "release_date": "2009-10-02",
+    "prev_set_code": "M10",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1092,
+        "abs": 84.0
+      },
+      "graph.relation_count": {
+        "pct": 0.2134,
+        "abs": 258.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Planar Magic (Planes/Planar Controller/Dice)",
+          "type": "RuleSystem",
+          "explanation": "Zendikar introduced the Plane card type, planar deck, planar die, and planar controller role. This is a completely new game subsystem that interacts with the stack, turn structure, and game state in novel ways. It required modeling the planar deck as a separate zone, the planar die as a new object type, and the planar controller as a distinct game role. The high complexity (4) and large number of new concepts (plane, planar_deck, planar_die, planar_controller role, variant.planar_magic) account for a significant portion of the 258 new relations and 84 new concepts.",
+          "affected_concepts": [
+            "card_type.plane",
+            "concept.planar_controller",
+            "role.planar_controller",
+            "deck.planar_deck",
+            "card.plane_card",
+            "die.planar_die",
+            "variant.planar_magic"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Planeswalker Uniqueness Rule and Loyalty Abilities",
+          "type": "Mechanic",
+          "explanation": "While Planeswalkers were introduced in Lorwyn, Zendikar expanded their rules complexity with the planeswalker uniqueness rule (only one of each planeswalker type can be on the battlefield) and loyalty ability activation rules. The loyalty ability mechanic (complexity 2) and uniqueness rule (complexity 2) required new interaction models with the stack and state-based actions. Planeswalker symbols were added as keyword references, indicating expanded rules text around PW interactions.",
+          "affected_concepts": [
+            "ability.loyalty",
+            "concept.planeswalker_uniqueness_rule",
+            "symbol.planeswalker_symbol"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "APNAP (Active Player, Nonactive Player) Order",
+          "type": "RuleSystem",
+          "explanation": "The APNAP order concept (complexity 3) formalizes the rule that multiple triggered abilities or actions from different players are ordered by active player first, then nonactive players. This is a fundamental change to how simultaneous effects interact with the stack and affects essentially all multiplayer and damage-sharing mechanics, creating system-wide ripples throughout the rule set.",
+          "affected_concepts": [
+            "concept.ano_order"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Delayed Triggered Abilities",
+          "type": "Mechanic",
+          "explanation": "Delayed triggered abilities (from mechanics like Suspend, abilities that trigger at end of turn, etc.) create complex state dependencies and recursive interactions. They trigger based on game state that may not yet exist when the ability is created, requiring additional tracking and interaction rules with other triggered abilities and the stack.",
+          "affected_concepts": [
+            "concept.delayed_triggered"
+          ],
+          "estimated_contribution_pct": 8
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Bands with Other",
+          "type": "Mechanic",
+          "explanation": "Bands with Other has complexity 4 and introduces complex attack restriction/requirement interactions. Although it's an older mechanic, its formalization as a concept pattern likely required new interaction rules for how banded creatures interact with attack requirements and restrictions.",
+          "affected_concepts": [
+            "concept.bands_with_other",
+            "concept.restriction_attack",
+            "concept.requirement_attack"
+          ],
+          "estimated_contribution_pct": 5
+        },
+        {
+          "name": "Attack/Block Requirement and Restriction System",
+          "type": "RuleSystem",
+          "explanation": "Formalized as separate concepts (attack restriction, attack requirement, block restriction, block requirement), this subsystem creates multiple layers of condition checking on combat actions. Each restriction/requirement can create edge cases that interact with other mechanics.",
+          "affected_concepts": [
+            "concept.restriction_attack",
+            "concept.requirement_attack",
+            "concept.restriction_block",
+            "concept.requirement_block"
+          ],
+          "estimated_contribution_pct": 5
+        },
+        {
+          "name": "Skip Step/Phase/Turn",
+          "type": "Mechanic",
+          "explanation": "Skip effects that bypass entire game phases or steps create non-linear turn structure, requiring rules to handle cases where expected game actions don't occur and how triggered abilities respond to skipped events.",
+          "affected_concepts": [
+            "concept.skip_step"
+          ],
+          "estimated_contribution_pct": 5
+        },
+        {
+          "name": "New Fundamental Actions (Casting, Activating, Stack, Resolving)",
+          "type": "RuleSystem",
+          "explanation": "Formalization of action concepts—casting spells (complexity 4), activating abilities (complexity 3), putting on stack (2), and resolving (2)—as distinct game-state transitions. These represent the foundational action model that other mechanics reference, creating ripple effects as 84 new concepts need to define their interactions with these actions.",
+          "affected_concepts": [
+            "action.casting_spell",
+            "action.activating_ability",
+            "action.putting_on_stack",
+            "action.resolving"
+          ],
+          "estimated_contribution_pct": 7
+        }
+      ],
+      "summary": "The complexity spike is primarily driven by the introduction of Planar Magic (new plane card type, planar deck, planar die, and planar controller rules), which introduced a novel game subsystem with multiple high-complexity concepts; secondary contributors include expanded Planeswalker rules, formalization of APNAP order, and new fundamental action modeling."
+    },
+    "delta_summary": "+11% concept_count, +21% relation_count"
+  },
+  {
+    "set_code": "ISD",
+    "set_name": "Innistrad",
+    "release_date": "2011-09-30",
+    "prev_set_code": "M12",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.115,
+        "abs": 117.0
+      },
+      "graph.relation_count": {
+        "pct": 0.2275,
+        "abs": 406.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.1434,
+        "abs": 443.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+12% concept_count, +23% relation_count, +14% uc_total"
+  },
+  {
+    "set_code": "AKH",
+    "set_name": "Amonkhet",
+    "release_date": null,
+    "prev_set_code": "AER",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "graph.relation_count",
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1719,
+        "abs": 232.0
+      },
+      "graph.relation_count": {
+        "pct": 0.2041,
+        "abs": 529.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.1561,
+        "abs": 775.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1171,
+        "abs": 26.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+17% concept_count, +20% relation_count, +16% uc_total, +12% keyword_count"
+  },
+  {
+    "set_code": "C17",
+    "set_name": "Commander 2017",
+    "release_date": "2017-08-25",
+    "prev_set_code": "HOU",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0992,
+        "abs": 130.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.5517,
+        "abs": 128.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+10% concept_count, +55% keyword_count"
+  },
+  {
+    "set_code": "THB",
+    "set_name": "Theros Beyond Death",
+    "release_date": "2020-01-24",
+    "prev_set_code": "ELD",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0713,
+        "abs": 104.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.137,
+        "abs": 583.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.4455,
+        "abs": 135.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+7% concept_count, +14% uc_total, +45% keyword_count"
+  },
+  {
+    "set_code": "LCI",
+    "set_name": "The Lost Caverns of Ixalan",
+    "release_date": "2023-11-16",
+    "prev_set_code": "WHO",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0754,
+        "abs": 101.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.2882,
+        "abs": 98.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Craft",
+          "type": "Mechanic",
+          "explanation": "Craft is a new keyword action (complexity 3) that lets a player exile a permanent along with a set of material objects to create a new permanent, involving replacement effects, exile interactions, and detailed material‑matching rules. This adds multiple rule subsections (702.167, 702.167a‑c) and ripples through other zones, significantly raising the concept count.",
+          "affected_concepts": [
+            "concept.702.167",
+            "concept.702.167a",
+            "concept.702.167b",
+            "concept.702.167c"
+          ],
+          "estimated_contribution_pct": 20
+        },
+        {
+          "name": "Discover",
+          "type": "Mechanic",
+          "explanation": "Discover (complexity 3) introduces a new library‑exile‑cast mechanic that requires tracking mana value, handling alternative costs, and defining the discovered card. The rule (701.55) plus its three subrules create a cascade of new interactions and state checks, accounting for a large share of the spike.",
+          "affected_concepts": [
+            "concept.701.55",
+            "concept.701.55a",
+            "concept.701.55b",
+            "concept.701.55c"
+          ],
+          "estimated_contribution_pct": 18
+        },
+        {
+          "name": "Finality Counters",
+          "type": "RuleSystem",
+          "explanation": "Rule 122.1h adds finality counters, which generate a replacement effect preventing a permanent from ever moving to the graveyard. This new subsystem modifies state‑based actions, interacts with removal, death triggers, regeneration, and other counters, creating system‑wide ripples across the rules.",
+          "affected_concepts": [
+            "concept.122.1h",
+            "concept.109.2"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "Descended this Turn (Rule 700.11)",
+          "type": "RuleSystem",
+          "explanation": "Defines a new game‑state flag that records when a permanent card has been put into a graveyard from anywhere this turn. This flag is referenced by newer mechanics and alters trigger conditions, adding a fresh condition to many rule checks and increasing overall complexity.",
+          "affected_concepts": [
+            "concept.700.11"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Incubate",
+          "type": "Mechanic",
+          "explanation": "Incubate creates a token that later transforms into a creature, requiring rules for token creation, counter placement, and transformation. This adds extra steps and interactions beyond the basic token rules, contributing noticeably to the concept count increase.",
+          "affected_concepts": [
+            "concept.701.55",
+            "concept.701.55a"
+          ],
+          "estimated_contribution_pct": 8
+        },
+        {
+          "name": "Attraction Dice (Roll to Visit & Open Attraction)",
+          "type": "Mechanic",
+          "explanation": "The new Attraction subsystem introduces dice‑based random outcomes, a dedicated Attraction zone, and visiting effects. These mechanics involve randomness, token generation, and activation restrictions, expanding the rule surface area substantially.",
+          "affected_concepts": [
+            "concept.701.55",
+            "concept.701.55b"
+          ],
+          "estimated_contribution_pct": 7
+        },
+        {
+          "name": "Manifest / Manifest Dungeon",
+          "type": "Mechanic",
+          "explanation": "Manifest mechanics create 2/2 tokens from libraries or other zones, requiring detailed flip and exile rules, and interact with a variety of other mechanics (e.g., morph, token creation). Their inclusion in the rules adds multiple sub‑concepts and contributes to the spike.",
+          "affected_concepts": [
+            "concept.701.55",
+            "concept.701.55c"
+          ],
+          "estimated_contribution_pct": 6
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Meld",
+          "type": "Mechanic",
+          "explanation": "Although meld existed in earlier sets, its rule definitions were expanded and refined in this release, adding further interactions and definition complexity that modestly contributed to the overall increase.",
+          "affected_concepts": [
+            "concept.701.55"
+          ],
+          "estimated_contribution_pct": 4
+        },
+        {
+          "name": "Ring Tempts You",
+          "type": "Mechanic",
+          "explanation": "Introduces a new ring‑bearer effect that modifies combat and provides incremental counters, requiring fresh rules for ring‑tempted state and emblems, adding a small but measurable amount of complexity.",
+          "affected_concepts": [
+            "concept.701.55"
+          ],
+          "estimated_contribution_pct": 3
+        }
+      ],
+      "summary": "The bulk of the complexity spike stems from the new Craft and Discover keyword actions, the Finality Counter subsystem, and the associated descended‑tracking rules, all of which introduce extensive new game‑state interactions and system‑wide ripples."
+    },
+    "delta_summary": "+8% concept_count, +29% keyword_count"
+  },
+  {
+    "set_code": "FIN",
+    "set_name": "Final Fantasy",
+    "release_date": "2025-06-04",
+    "prev_set_code": "TDM",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.1159,
+        "abs": 124.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.3706,
+        "abs": 106.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+12% concept_count, +37% keyword_count"
+  },
+  {
+    "set_code": "TMT",
+    "set_name": "Teenage Mutant Ninja Turtles",
+    "release_date": "2026-02-23",
+    "prev_set_code": "ECL",
+    "spiked_metrics": [
+      "graph.concept_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.concept_count": {
+        "pct": 0.0786,
+        "abs": 70.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1992,
+        "abs": 51.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+8% concept_count, +20% keyword_count"
+  },
+  {
+    "set_code": "5DN",
+    "set_name": "Fifth Dawn",
+    "release_date": "2004-06-04",
+    "prev_set_code": "DST",
+    "spiked_metrics": [
+      "graph.relation_count"
+    ],
+    "deltas": {
+      "graph.relation_count": {
+        "pct": 0.1626,
+        "abs": 86.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Layers (Continuous Effect)",
+          "type": "RuleSystem",
+          "explanation": "Introduces a system‑wide ordering mechanism for continuous effects that must be evaluated in a strict sequence, spawning a large number of new relations across all permanents and spells.",
+          "affected_concepts": [
+            "concept.layers"
+          ],
+          "estimated_contribution_pct": 30
+        },
+        {
+          "name": "Copying Objects",
+          "type": "Mechanic",
+          "explanation": "Allows any object to be duplicated, requiring rules for how copied characteristics, timestamps, and interactions with other subsystems (e.g., layers, banding) are resolved, greatly expanding the graph.",
+          "affected_concepts": [
+            "concept.copying"
+          ],
+          "estimated_contribution_pct": 20
+        },
+        {
+          "name": "Banding",
+          "type": "Keyword",
+          "explanation": "Creates a special combat alliance between creatures, introducing new attack/defense rules and interaction pathways that were absent in previous sets.",
+          "affected_concepts": [
+            "concept.banding"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "Characteristic‑Setting Ability",
+          "type": "Mechanic",
+          "explanation": "Abilities that set or modify base characteristics (e.g., power/toughness) interact with layers and copying, producing recursive characteristic changes and additional rule dependencies.",
+          "affected_concepts": [
+            "concept.characteristic_setting_ability"
+          ],
+          "estimated_contribution_pct": 12
+        },
+        {
+          "name": "Skip (Step/Phase/Turn)",
+          "type": "Mechanic",
+          "explanation": "Allows players to skip entire steps, phases, or turns, which alters the turn‑sequence graph and forces the rules engine to model conditional progression and side‑effects.",
+          "affected_concepts": [
+            "action.skip"
+          ],
+          "estimated_contribution_pct": 8
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Scry",
+          "type": "Keyword",
+          "explanation": "Introduces a new action that lets players look at and reorder the top of their library, adding a modest set of relations."
+        },
+        {
+          "name": "Sunburst",
+          "type": "Keyword",
+          "explanation": "Creates color‑counting effects that add extra conditions but have limited interaction with other systems."
+        },
+        {
+          "name": "Removed from Combat",
+          "type": "Keyword",
+          "explanation": "Triggers when a creature leaves combat, adding extra state‑change rules."
+        },
+        {
+          "name": "Poison Counters",
+          "type": "Concept",
+          "explanation": "Adds a separate counter system that interacts with damage and loss conditions."
+        },
+        {
+          "name": "Combat Requirement",
+          "type": "Concept",
+          "explanation": "Introduces mandatory attack or block rules that increase dependency edges."
+        }
+      ],
+      "summary": "The spike in rule‑graph complexity is principally driven by the new Layers subsystem, which created a massive cascade of interactions, closely followed by the Copying mechanic, Banding keyword, Characteristic‑Setting abilities, and Skip actions, with other new keywords adding minor complexity."
+    },
+    "delta_summary": "+16% relation_count"
+  },
+  {
+    "set_code": "DIS",
+    "set_name": "Dissension",
+    "release_date": "2006-05-05",
+    "prev_set_code": "GPT",
+    "spiked_metrics": [
+      "graph.relation_count",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "graph.relation_count": {
+        "pct": 0.1331,
+        "abs": 117.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1515,
+        "abs": 10.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+13% relation_count, +15% keyword_count"
+  },
+  {
+    "set_code": "EMN",
+    "set_name": "Eldritch Moon",
+    "release_date": "2016-07-22",
+    "prev_set_code": "SOI",
+    "spiked_metrics": [
+      "graph.relation_count",
+      "cognitive.uc_total"
+    ],
+    "deltas": {
+      "graph.relation_count": {
+        "pct": 0.1101,
+        "abs": 283.0
+      },
+      "cognitive.uc_total": {
+        "pct": 0.1411,
+        "abs": 682.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+11% relation_count, +14% uc_total"
+  },
+  {
+    "set_code": "ARB",
+    "set_name": "Alara Reborn",
+    "release_date": "2009-04-30",
+    "prev_set_code": "CON",
+    "spiked_metrics": [
+      "cognitive.uc_total",
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "cognitive.uc_total": {
+        "pct": 0.1302,
+        "abs": 292.0
+      },
+      "mechanic.keyword_count": {
+        "pct": 0.1034,
+        "abs": 12.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+13% uc_total, +10% keyword_count"
+  },
+  {
+    "set_code": "EVE",
+    "set_name": "Eventide",
+    "release_date": "2008-07-25",
+    "prev_set_code": "SHM",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.1275,
+        "abs": 13.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "Planeswalker",
+          "type": "Keyword",
+          "explanation": "Planeswalker introduced a fundamentally new card type that interacts with combat rules, damage redirection, loyalty ability systems, and creates entirely new game-state relationships not previously possible. As a system-wide addition, it ripples through targeting rules, combat damage assignment, and creates new strategic layers that affect nearly every game.",
+          "affected_concepts": [
+            "cardtype.planeswalker",
+            "zone.in_play",
+            "mechanic.state_based"
+          ],
+          "estimated_contribution_pct": 35
+        },
+        {
+          "name": "State-Based Effects",
+          "type": "RuleSystem",
+          "explanation": "Explicit codification of state-based actions creates a rule subsystem that affects all game objects simultaneously. Understanding SBA checks, their continuous nature, and their interaction with other mechanics (particularly planeswalkers entering/leaving with loyalty, damage on creatures, legendary rule) is a core complexity multiplier.",
+          "affected_concepts": [
+            "mechanic.state_based",
+            "zone.in_play"
+          ],
+          "estimated_contribution_pct": 18
+        },
+        {
+          "name": "Multiplayer Variants (Emperor, Two-Headed Giant, Grand Melee)",
+          "type": "Mechanic",
+          "explanation": "These introduced multiple new rule subsystems that fundamentally change how the game operates: team-based combat with different attack restrictions, 'range of influence' spatial rules, and turn structure modifications. Each variant creates cascading rule interactions that don't exist in 1v1 Magic.",
+          "affected_concepts": [
+            "concept.limited_range_of_influence_option",
+            "concept.attack_multiple_players_option",
+            "concept.two_headed_giant_variant",
+            "concept.emperor_variant",
+            "concept.grand_melee_variant"
+          ],
+          "estimated_contribution_pct": 20
+        },
+        {
+          "name": "Equipment/Aura/Fortification",
+          "type": "Keyword",
+          "explanation": "These attachment keywords create persistent game-state interactions through equip/attach costs, legal targets, and creature-based triggers. Equipment adds further complexity with its separate activation costs and the need to track both attachment and equip costs.",
+          "affected_concepts": [
+            "mechanic.equipment",
+            "mechanic.aura",
+            "mechanic.fortification"
+          ],
+          "estimated_contribution_pct": 12
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Controlling Another Player's Turn",
+          "type": "Concept",
+          "explanation": "Turn control effects introduce highly complex game-state interactions requiring full understanding of action timing, choices, and shortcuts that affect all other rule subsystems.",
+          "affected_concepts": [
+            "concept.controlling_turn"
+          ],
+          "estimated_contribution_pct": 8
+        },
+        {
+          "name": "Retrace",
+          "type": "Keyword",
+          "explanation": "Recurring from graveyard creates new recursion paths requiring tracking of hand state, discard timing, and repetitive card advantage loops.",
+          "affected_concepts": [
+            "keyword.retrace"
+          ],
+          "estimated_contribution_pct": 7
+        }
+      ],
+      "summary": "The primary complexity spike is driven by Planeswalker (the new card type) as the single largest contributor, followed by state-based effects systematization and multiplayer variant rules—each creating multiplicative interactions across the rules framework."
+    },
+    "delta_summary": "+13% keyword_count"
+  },
+  {
+    "set_code": "ROE",
+    "set_name": "Rise of the Eldrazi",
+    "release_date": "2010-04-23",
+    "prev_set_code": "WWK",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.1316,
+        "abs": 15.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+13% keyword_count"
+  },
+  {
+    "set_code": "M11",
+    "set_name": "Magic 2011",
+    "release_date": "2010-07-16",
+    "prev_set_code": "ROE",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.1473,
+        "abs": 19.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+15% keyword_count"
+  },
+  {
+    "set_code": "DKA",
+    "set_name": "Dark Ascension",
+    "release_date": "2012-02-03",
+    "prev_set_code": "ISD",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.1152,
+        "abs": 19.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": "{\n  \"primary_culprits\": [\n    {\n      \"name\": \"Splice\",\n      \"type\": \"Keyword\",\n      \"explanation\": \"Splice lets a card’s text be appended to another spell, creating recursive spell‑modifying interactions that require new rule handling and increase game‑state complexity.\",\n      \"affected_concepts\": [\"concept.splice\"],\n      \"estimated_contribution_pct\": 20\n    },\n    {\n      \"name\": \"Layer System (Continuous Effects)\",\n      \"type\": \"RuleSystem\",\n      \"explanation\": \"The introduction of a seven‑layer system for applying continuous effects, with sub‑layers for copy, control, text, type, color, abilities, power/toughness, counters, etc., forces a deterministic ordering of all such effects, leading to a system‑wide ripple in rule logic and interaction checks.\",\n      \"affected_concepts\": [\n        \"concept.layer.1_copy_effects\",\n        \"concept.layer.2_control_changing_effects\",\n        \"concept.layer.3_text_changing_effects\",\n        \"concept.layer.4_type_changing_effects\",\n        \"concept.layer.5_color_changing_effects\",\n        \"concept.layer.6_ability_effects\",\n        \"concept.layer.7_power_toughness_effects\",\n        \"concept.layer.7a_cda_pt\",\n        \"concept.layer.7b_set_pt\",\n        \"concept.layer.7c_modify_pt\",\n        \"concept.layer.7d_counters\"\n      ],\n      \"estimated_contribution_pct\": 35\n    },\n    {\n      \"name\": \"As‑Though Effect\",\n      \"type\": \"Concept\",\n      \"explanation\": \"As‑though effects allow a card to be treated as if it had a different characteristic or were in a different zone, enabling novel loops and interaction patterns that require additional rule definitions.\",\n      \"affected_concepts\": [\"concept.as_though_effect\"],\n      \"estimated_contribution_pct\": 20\n    },\n    {\n      \"name\": \"Activation Timing Restriction\",\n      \"type\": \"MechanicPattern\",\n      \"explanation\": \"New restrictions on when abilities can be activated (e.g., limits on mana abilities, specific timing windows) add complexity to the stack and timing windows, deman"
+    },
+    "delta_summary": "+12% keyword_count"
+  },
+  {
+    "set_code": "KLD",
+    "set_name": "Kaladesh",
+    "release_date": "2016-09-30",
+    "prev_set_code": "EMN",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.1139,
+        "abs": 23.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [],
+      "secondary_factors": [],
+      "summary": "(analysis failed to parse)",
+      "_raw_response": ""
+    },
+    "delta_summary": "+11% keyword_count"
+  },
+  {
+    "set_code": "WHO",
+    "set_name": "Doctor Who",
+    "release_date": "2023-10-13",
+    "prev_set_code": "WOE",
+    "spiked_metrics": [
+      "mechanic.keyword_count"
+    ],
+    "deltas": {
+      "mechanic.keyword_count": {
+        "pct": 0.193,
+        "abs": 55.0
+      }
+    },
+    "analysis": {
+      "primary_culprits": [
+        {
+          "name": "New Action Keywords (keyword.action_*)",
+          "type": "Keyword",
+          "explanation": "The set introduced 30+ new action keywords (Activate, Attach, Cast, Counter, etc.) each with associated complexity ratings, expanding the rulebook's keyword count by 55 entries, which accounts for the majority of the measured 19.3% increase. These keywords define new verb-based abilities that can appear on any card, multiplying game‑state interactions and requiring extensive new rule text for each action.",
+          "affected_concepts": [
+            "concept.keyword",
+            "concept.action_keywords"
+          ],
+          "estimated_contribution_pct": 70
+        },
+        {
+          "name": "Face a Villainous Choice (701.53)",
+          "type": "RuleSystem",
+          "explanation": "Introduces a novel decision mechanic where a player must choose between two options, possibly illegal, and the chosen option's actions are performed as much as possible. This creates new interactions with replacement effects, exceptions to rule 608.2d, and APNAP ordering, adding notable complexity.",
+          "affected_concepts": [
+            "concept.701.53"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Time Travel (701.54)",
+          "type": "Mechanic",
+          "explanation": "Allows a player to choose permanents with time counters and/or suspended cards and manipulate them, involving counter placement, untap steps, and potential layering issues. The mechanic introduces recursive state changes and interacts with suspend, counters, and turn structure.",
+          "affected_concepts": [
+            "concept.701.54"
+          ],
+          "estimated_contribution_pct": 8
+        },
+        {
+          "name": "Doctor's Companion (Partner) (702.124m)",
+          "type": "Mechanic",
+          "explanation": "Extends the commander format by allowing two legendary creatures as commanders under specific conditions (one being a Doctor). This adds new partnership rules, restrictions on multiple commanders, and interaction with existing partner abilities, creating system‑wide ripples in the commander rule subsystem.",
+          "affected_concepts": [
+            "concept.702.124m"
+          ],
+          "estimated_contribution_pct": 7
+        },
+        {
+          "name": "Read Ahead (Saga) (702.155b/c)",
+          "type": "Mechanic",
+          "explanation": "Adds a variable chapter number selection for Sagas entering the battlefield, allowing controllers to choose any number up to the final chapter. This creates new counter‑distribution patterns, interacts with other counter‑based mechanics, and adds complexity to saga resolution.",
+          "affected_concepts": [
+            "concept.702.155b",
+            "concept.702.155c"
+          ],
+          "estimated_contribution_pct": 5
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Face‑Down Permanent Rule Update (708.2b)",
+          "type": "RuleSystem",
+          "explanation": "Clarifies that face‑down permanents cannot be turned face‑down again, preventing illegal state changes. While relatively narrow, it adds a small amount of complexity to the morph/manifest subsystem.",
+          "affected_concepts": [
+            "concept.708.2b"
+          ],
+          "estimated_contribution_pct": 2
+        },
+        {
+          "name": "Partner Ability Tweaks (702.124f,g)",
+          "type": "Mechanic",
+          "explanation": "Refines the interaction of multiple partner abilities and clarifies that they cannot be combined. This adds nuance to commander selection but is a smaller addition compared to Doctor's Companion.",
+          "affected_concepts": [
+            "concept.702.124f",
+            "concept.702.124g"
+          ],
+          "estimated_contribution_pct": 2
+        },
+        {
+          "name": "Saga Chapter Number Update (714.3a)",
+          "type": "Mechanic",
+          "explanation": "Adjusts how chapter numbers are assigned for certain Sagas, interacting with read ahead and existing saga rules, creating modest complexity.",
+          "affected_concepts": [
+            "concept.714.3a"
+          ],
+          "estimated_contribution_pct": 1
+        }
+      ],
+      "summary": "The bulk of the complexity spike comes from the addition of dozens of new action keywords, with notable secondary complexity added by the novel Face a Villainous Choice and Time Travel mechanics, the expanded commander partnership rules, and the new Saga read‑ahead ability."
+    },
+    "delta_summary": "+19% keyword_count"
+  }
+]
