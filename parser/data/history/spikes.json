@@ -34,10 +34,54 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Phasing",
+          "type": "Mechanic",
+          "explanation": "Introduction of the Phasing mechanic required new zone definitions, timing rules, state tracking, and interaction clarifications for permanents entering/existing in the phased-out zone.",
+          "affected_concepts": [
+            "zone.phased_out",
+            "concept.card_part"
+          ],
+          "estimated_contribution_pct": 35
+        },
+        {
+          "name": "Color & Creature Stats as Formal Concepts",
+          "type": "RuleSystem",
+          "explanation": "Formal definition of Color, Power, and Toughness as core game concepts required extensive new rules for determination, interaction, and layer-based dependencies.",
+          "affected_concepts": [
+            "concept.color",
+            "concept.power",
+            "concept.toughness"
+          ],
+          "estimated_contribution_pct": 30
+        },
+        {
+          "name": "Subtype System Expansion",
+          "type": "RuleSystem",
+          "explanation": "Addition of Enchantment and Land subtypes, plus the Legend supertype, required new rules for type lines, subtype interactions, and legendary permanents.",
+          "affected_concepts": [
+            "concept.enchantment_subtype",
+            "concept.land_subtype",
+            "concept.legend",
+            "concept.global_enchantment"
+          ],
+          "estimated_contribution_pct": 25
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Zone Clarifications",
+          "type": "RuleSystem",
+          "explanation": "Formal definition of Hand, Removed from Game, and Ante zones required rules for zone transitions, visibility, and interactions."
+        },
+        {
+          "name": "Apocalypse Block Mechanics",
+          "type": "Keyword",
+          "explanation": "New keywords and mechanics in the Apocalypse set (e.g., cumulative upkeep variants, new abilities) added to keyword count and required rule clarifications."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the Phasing mechanic, the formalization of color/power/toughness as core concepts, and a major expansion of the subtype and supertype system."
     },
     "delta_summary": "+37% rule_count, +67% concept_count, +95% relation_count, +61% uc_total, +47% keyword_count"
   },
@@ -56,10 +100,33 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Object System Formalization",
+          "type": "RuleSystem",
+          "explanation": "The introduction of the 'object' concept as a foundational game entity, along with the formal definitions of owner, controller, and characteristics, required extensive new rules to define interactions, layers, and relationships between cards, spells, and permanents.",
+          "affected_concepts": [
+            "concept.object",
+            "concept.owner",
+            "concept.controller",
+            "concept.characteristic"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Card Type System Overhaul",
+          "type": "RuleSystem",
+          "explanation": "The formalization of the type line, supertypes, and specific card types (Artifact, Creature, Enchantment, Instant, Sorcery) required detailed rules for each type's properties and behaviors."
+        },
+        {
+          "name": "Summoning Sickness",
+          "type": "Mechanic",
+          "explanation": "Adding the explicit 'summoning sickness' mechanic pattern introduced rules governing when creatures can attack or use activated abilities."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the foundational formalization of the game's object and card type systems, requiring a large volume of new definitional and operational rules."
     },
     "delta_summary": "+26% rule_count"
   },
@@ -98,10 +165,51 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
+      "primary_culprits": [
+        {
+          "name": "Equipment",
+          "type": "Mechanic",
+          "explanation": "The Equipment subtype and equip ability introduced a new layer of permanent attachment, requiring precise definitions for controller/owner relationships of both the Equipment and the equipped creature, and new timing rules for equip/unequip.",
+          "affected_concepts": [
+            "concept.card_owner",
+            "concept.permanent_controller",
+            "concept.token_owner",
+            "concept.token_controller",
+            "concept.artifact_subtypes"
+          ],
+          "estimated_contribution_pct": 60
+        },
+        {
+          "name": "Affinity",
+          "type": "Keyword",
+          "explanation": "Affinity for artifacts introduced a variable cost reduction mechanic that required new rules for calculating total costs and defining what counts toward the reduction, increasing spell casting complexity.",
+          "affected_concepts": [
+            "concept.spell_controller",
+            "concept.spell_owner",
+            "concept.active_player"
+          ],
+          "estimated_contribution_pct": 25
+        },
+        {
+          "name": "Controller/Owner Distinction Formalization",
+          "type": "RuleSystem",
+          "explanation": "Mirrodin's mechanics (especially Equipment and artifact interactions) forced a comprehensive formalization of the controller vs. owner concepts for cards, spells, permanents, tokens, and abilities, leading to many new defined terms.",
+          "affected_concepts": [
+            "concept.card_owner",
+            "concept.token_owner",
+            "concept.token_controller",
+            "concept.spell_owner",
+            "concept.spell_controller",
+            "concept.permanent_controller",
+            "concept.ability_controller",
+            "concept.active_player",
+            "concept.nonactive_player"
+          ],
+          "estimated_contribution_pct": 15
+        }
+      ],
       "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "summary": "The complexity spike was primarily driven by the Equipment mechanic and Affinity keyword, which necessitated a major formalization of the controller/owner distinction across all game objects."
     },
     "delta_summary": "+6% rule_count, +19% concept_count, +22% relation_count, +17% uc_total, +15% keyword_count"
   },
@@ -135,10 +243,44 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "World",
+          "type": "Keyword",
+          "explanation": "The introduction of the 'World' supertype for enchantments created a new global layer of game state management, requiring rules for its unique 'only one World permanent' replacement effect and the timing of its application.",
+          "affected_concepts": [
+            "concept.world",
+            "card_type.enchantment"
+          ],
+          "estimated_contribution_pct": 60
+        },
+        {
+          "name": "Card Anatomy Formalization",
+          "type": "RuleSystem",
+          "explanation": "The rules formally defined the physical parts of a card (name, mana cost, illustration, text box, type line) as distinct concepts, adding structural complexity to card definition and interaction rules.",
+          "affected_concepts": [
+            "card_part.card_name",
+            "card_part.mana_cost",
+            "card_part.illustration",
+            "card_part.text_box",
+            "card_type"
+          ],
+          "estimated_contribution_pct": 25
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Card Type Taxonomy",
+          "type": "RuleSystem",
+          "explanation": "Explicitly listing and defining permanent and non-permanent card types (Artifact, Creature, Enchantment, Instant, Sorcery) as distinct concepts required new rules for type-based interactions and classifications."
+        },
+        {
+          "name": "Basic Land Concept",
+          "type": "Concept",
+          "explanation": "Formally defining 'Basic' as a concept for lands added rules for the basic supertype and its deck-building implications."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the 'World' supertype mechanic and a major formalization of card anatomy and type taxonomy in the rulebook."
     },
     "delta_summary": "+5% rule_count, +7% concept_count, +15% relation_count, +29% keyword_count"
   },
@@ -244,10 +386,50 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Tribal",
+          "type": "CardType",
+          "explanation": "Introduction of the Tribal card type required comprehensive new rules for card type interactions, spell types, and permanent types, adding significant structural complexity.",
+          "affected_concepts": [
+            "Tribal"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Team Mechanics",
+          "type": "RuleSystem",
+          "explanation": "Addition of multiplayer team concepts (defending players, shared life total, team seat isolation) required new layers of rules for player relationships, life total management, and turn structure in team games.",
+          "affected_concepts": [
+            "Defending Players",
+            "Shared Life Total",
+            "Team Seat Isolation"
+          ],
+          "estimated_contribution_pct": 35
+        },
+        {
+          "name": "Phase/Step End Effects",
+          "type": "RuleSystem",
+          "explanation": "Formalization of 'until end of phase/step' effects as a distinct category required new timing and duration rules, adding complexity to the rules engine.",
+          "affected_concepts": [
+            "Until End of Phase/Step Effect"
+          ],
+          "estimated_contribution_pct": 15
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Scry & Fateseal",
+          "type": "Mechanic",
+          "explanation": "Added new library manipulation actions with specific timing and resolution rules."
+        },
+        {
+          "name": "Action Formalization",
+          "type": "RuleSystem",
+          "explanation": "Explicit definition of actions like Attach, Destroy, Regenerate, and Sacrifice refined the rules but increased verbosity."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the Tribal card type, comprehensive team-game systems, and the formalization of phase/step duration effects."
     },
     "delta_summary": "+9% rule_count, +21% keyword_count"
   },
@@ -266,10 +448,41 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Planeswalker Loyalty",
+          "type": "RuleSystem",
+          "explanation": "The introduction of the Planeswalker card type in Lorwyn required a comprehensive rules framework for loyalty abilities, loyalty counters, and the planeswalker uniqueness rule, which added significant new layers to timing, activation, and state-based actions.",
+          "affected_concepts": [
+            "concept.planeswalker_loyalty"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Spell & Ability Resolution Framework",
+          "type": "RuleSystem",
+          "explanation": "M10 formalized the concepts of 'casting a spell' and 'activating an ability' as distinct, multi-step processes, and created a detailed rule structure for 'spell and ability resolution'. This decomposed previously implicit processes into explicit, sequential steps, greatly increasing rule count.",
+          "affected_concepts": [
+            "concept.casting_spell",
+            "concept.activating_ability",
+            "concept.spell_ability_resolution"
+          ],
+          "estimated_contribution_pct": 35
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Equipment & Aura Keyword Rules",
+          "type": "Keyword",
+          "explanation": "Formalizing 'Equipment', 'Aura', and 'Equip' as keywords with comprehensive rules for attachment, legality, and state-based effects added new subsystems."
+        },
+        {
+          "name": "Text & Cost Alteration Rules",
+          "type": "RuleSystem",
+          "explanation": "New structured rules for text-changing effects and cost alteration created explicit layers for handling continuous and one-shot effects that modify card characteristics and costs."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the new Planeswalker card type requiring a full loyalty rule system and a major restructuring of the game's core processes into formalized steps for casting, activating, and resolving spells and abilities."
     },
     "delta_summary": "+24% rule_count"
   },
@@ -298,10 +511,34 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Zone-Change Triggers & State Triggers",
+          "type": "RuleSystem",
+          "explanation": "Introduction of new trigger types (zone_change, state, delayed, intervening_if) required defining complex timing, event monitoring, and conditional checking rules, significantly increasing rule interactions and cognitive load.",
+          "affected_concepts": [
+            "trigger.zone_change",
+            "trigger.state",
+            "trigger.delayed",
+            "trigger.intervening_if",
+            "effect"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Layer, Timestamp & Dependency Systems",
+          "type": "RuleSystem",
+          "explanation": "Formalization of continuous effect interaction systems added foundational but complex rule infrastructure for ordering and dependency resolution."
+        },
+        {
+          "name": "Multiplayer & Control Concepts",
+          "type": "RuleSystem",
+          "explanation": "Added team concede, life division, and refined control concepts, expanding rules for non-duel formats and permanent ownership interactions."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of a sophisticated triggered ability subsystem (zone-change, state, and delayed triggers) requiring new monitoring and interaction rules, secondarily supported by formalized continuous effect systems and multiplayer concepts."
     },
     "delta_summary": "+11% rule_count, +7% concept_count, +13% uc_total"
   },
@@ -335,10 +572,57 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Phasing",
+          "type": "Mechanic",
+          "explanation": "Introduced a complex, timing-based permanent removal and return system requiring new zone-like tracking, state-based actions, and triggered ability rules.",
+          "affected_concepts": [
+            "concept.phasing",
+            "zone.exile",
+            "concept.characteristics",
+            "concept.reminder_text"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Legendary",
+          "type": "Keyword",
+          "explanation": "Added the supertype 'Legendary' with its associated 'world rule' for permanents, requiring new layers of uniqueness checks and state-based actions.",
+          "affected_concepts": [
+            "keyword.legendary",
+            "concept.characteristics",
+            "concept.subtype",
+            "concept.creature_type"
+          ],
+          "estimated_contribution_pct": 25
+        },
+        {
+          "name": "Local Enchantments (Auras)",
+          "type": "RuleSystem",
+          "explanation": "Formalized the 'enchant' keyword and the 'Aura' subtype, creating a new permanent attachment system with targeting, 'enchant' ability rules, and continuous effects on the enchanted permanent.",
+          "affected_concepts": [
+            "concept.aura",
+            "concept.enchanted_permanent",
+            "concept.characteristics",
+            "concept.subtype"
+          ],
+          "estimated_contribution_pct": 20
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Card Characteristics Framework",
+          "type": "RuleSystem",
+          "explanation": "Systematized card types, supertypes, subtypes, and power/toughness into a unified 'characteristics' concept, enabling future complexity."
+        },
+        {
+          "name": "Exile Zone Formalization",
+          "type": "Zone",
+          "explanation": "Changed 'Removed from the Game' from a simple state to a true game zone with its own rules, interacting with new mechanics."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the intricate Phasing mechanic, the Legendary supertype rule system, and the formalization of Aura (Local Enchantment) attachment rules."
     },
     "delta_summary": "+17% concept_count, +28% relation_count, +28% uc_total, +50% keyword_count"
   },
@@ -367,10 +651,50 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": "{\n  \"primary_culprits\": [\n    {\n      \"name\": \"Phasing\",\n      \"type\": \"Mechanic\",\n      \"explanation\": \"Phasing introduces an entirely new dimensional state (phased‑in / phased‑out) that applies to every permanent, interacts with layers, triggers, and state‑based actions, and can recursively affect other mechanics (e.g., banding, kicker, combat restrictions). The need to model phase transitions, timing windows, and cross‑mechanic interactions dramatically inflates both node and edge counts in the rule graph.\",\n      \"affected_concepts\": [\n        \"mechanic.phasing\",\n        \"concept.band\",\n        \"mechanic.attacking_restriction\",\n        \"mechanic.blocking_restriction\",\n        \"mechanic.kicker\"\n      ],\n      \"estimated_contribution_pct\": 30\n    },\n    {\n      \"name\": \"Band\",\n      \"type\": \"Concept\",\n      \"explanation\": \"Band (and its interaction with banding) creates a new grouping mechanism in combat, allowing multiple creatures to attack as a single entity and altering how damage is assigned and blocked. This mechanic introduces a host of new relational edges between creatures, players, and combat effects, and it reverberates through other subsystems such as blocking restrictions and damage distribution.\",\n      \"affected_concepts\": [\n        \"concept.band\",\n        \"mechanic.attacking_restriction\",\n        \"mechanic.blocking_restriction\",\n        \"mechanic.phasing\"\n      ],\n      \"estimated_contribution_pct\": 25\n    },\n    {\n      \"name\": \"Kicker\",\n      \"type\": \"Mechanic\",\n      \"explanation\": \"Kicker adds optional additional costs that create multi‑stage resolution paths for spells and abilities. Because kicked versions can generate unique triggers, modify costs, and interact with other cost‑based mechanics (e.g., buyback, echo), the rule graph gains many new conditional edges and state‑tracking nodes.\",\n      \"affected_concepts\": [\n        \"mechanic.kicker\",\n        \"mechanic.buyback\",\n        \"mechanic.echo\",\n        \"mechanic.fading\"\n      ],\n      \"est"
+      "primary_culprits": [
+        {
+          "name": "Phasing",
+          "type": "Mechanic",
+          "explanation": "Introduced a complex, timing-based permanent removal and return system that required new state-tracking rules, interaction layers, and exception handling for nearly every zone and action.",
+          "affected_concepts": [
+            "action.play_land",
+            "action.removed_from_combat",
+            "mechanic.attacking_restriction",
+            "mechanic.blocking_restriction",
+            "concept.band"
+          ],
+          "estimated_contribution_pct": 45
+        },
+        {
+          "name": "Band",
+          "type": "Mechanic",
+          "explanation": "Added a highly exception-based and restrictive combat grouping mechanic with intricate timing and declaration rules, significantly complicating the combat phase and creature interactions.",
+          "affected_concepts": [
+            "action.removed_from_combat",
+            "mechanic.attacking_restriction",
+            "mechanic.blocking_restriction"
+          ],
+          "estimated_contribution_pct": 25
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Buyback",
+          "type": "Mechanic",
+          "explanation": "Added an optional additional cost that creates a replacement effect for moving a spell to hand instead of graveyard, requiring stack and resolution rule adjustments."
+        },
+        {
+          "name": "Fading",
+          "type": "Mechanic",
+          "explanation": "Introduced a new time-limited permanent mechanic with counter removal and sacrifice conditions, adding upkeep complexity and state-based action checks."
+        },
+        {
+          "name": "Cycling",
+          "type": "Mechanic",
+          "explanation": "Created a new activated ability template allowing card replacement from hand, requiring rules for timing, speed, and a new special action."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by Phasing's pervasive rule system and Band's intricate combat exceptions, with secondary contributions from new optional-cost and timing mechanics like Buyback and Fading."
     },
     "delta_summary": "+16% concept_count, +18% relation_count, +14% uc_total"
   },
@@ -517,10 +841,29 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
+      "primary_culprits": [
+        {
+          "name": "Multiplayer Variant Rules",
+          "type": "RuleSystem",
+          "explanation": "The addition of comprehensive rules for multiplayer formats (Free-for-All, Two-Headed Giant, Emperor) introduced numerous new concepts like Range of Influence, team turns, attacking multiple players/directions, and variant-specific roles (Emperor, General).",
+          "affected_concepts": [
+            "concept.limited_range_of_influence",
+            "concept.range_of_influence",
+            "concept.attack_multiple_players",
+            "concept.attack_left",
+            "concept.attack_right",
+            "variant.free_for_all",
+            "variant.two_headed_giant",
+            "concept.team_turn",
+            "variant.emperor",
+            "concept.emperor",
+            "concept.general"
+          ],
+          "estimated_contribution_pct": 85
+        }
+      ],
       "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "summary": "The complexity spike was almost entirely caused by the formal integration of detailed multiplayer variant rules into the Comprehensive Rules for the first time."
     },
     "delta_summary": "+12% concept_count, +11% relation_count"
   },
@@ -636,10 +979,34 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Two-Headed Giant",
+          "type": "RuleSystem",
+          "explanation": "Lorwyn introduced comprehensive rules for Two-Headed Giant, a multiplayer team format requiring new systems for attack/block declarations, mulligans, team seating, and range-of-influence restrictions for auras, equipment, and various effects.",
+          "affected_concepts": [
+            "concept.attack_left_option",
+            "concept.attack_right_option",
+            "concept.deploy_creatures_option",
+            "concept.team_seat",
+            "concept.multiplayer_mulligan",
+            "concept.defending_player_declaration",
+            "concept.aura_enchant_range",
+            "concept.equipment_range",
+            "concept.replacement_effect_range",
+            "concept.prevention_effect_range"
+          ],
+          "estimated_contribution_pct": 85
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Multiplayer Legend/World Rule Updates",
+          "type": "RuleSystem",
+          "explanation": "Clarified how the 'legend rule' and 'world rule' function in multiplayer games with range of influence, adding two new concept patterns."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the full integration of the Two-Headed Giant multiplayer team format into the Comprehensive Rules."
     },
     "delta_summary": "+6% concept_count"
   },
@@ -784,10 +1151,33 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Continuous Effects",
+          "type": "RuleSystem",
+          "explanation": "The formalization of Continuous Effects as a comprehensive rule system (layer system, dependency, timestamps) added significant structural complexity to how the game state is determined, affecting numerous existing interactions.",
+          "affected_concepts": [
+            "concept.continuous_effects",
+            "concept.enchanted_object",
+            "concept.illegal_attachment",
+            "cardtype.aura"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Combat Phase Restructuring",
+          "type": "RuleSystem",
+          "explanation": "The detailed breakdown of the Combat phase into steps and the formalization of related concepts like 'lethal damage' and 'damage marking' increased relational complexity."
+        },
+        {
+          "name": "Aura & Enchantment Rules",
+          "type": "RuleSystem",
+          "explanation": "Clarification of Aura subtypes, attachment rules, and the 'enchanted object' concept added new relationships and state-checking conditions."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the formalization of the Continuous Effects layer system and a detailed restructuring of combat and permanent attachment rules."
     },
     "delta_summary": "+12% concept_count, +23% relation_count, +14% uc_total"
   },
@@ -821,10 +1211,35 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Tournament & Multiplayer Rules Framework",
+          "type": "RuleSystem",
+          "explanation": "The addition of formal definitions for Two-Player Game, Multiplayer Game, Tournament, Match, Player, Deck, Card Pool, Life Total, Starting Life Total, Starting Player, and Turn Order created a foundational layer of game structure concepts that were previously implicit or less formally defined. This represents a major systematization of the game's core framework.",
+          "affected_concepts": [
+            "game.two_player_game",
+            "game.multiplayer_game",
+            "game.tournament",
+            "game.match",
+            "player.magic_player",
+            "deck.magic_deck",
+            "card_pool",
+            "life.total",
+            "life.starting_total",
+            "turn.starting_player",
+            "turn.order"
+          ],
+          "estimated_contribution_pct": 70
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Priority System Clarification",
+          "type": "RuleSystem",
+          "explanation": "The explicit addition of 'Receive Priority' as a formal concept further refined the core turn structure and stack interaction rules, adding to the conceptual graph."
+        }
+      ],
+      "summary": "The complexity spike was primarily caused by the comprehensive formalization of the game's foundational framework, including tournament structure, multiplayer rules, and core game objects, rather than by new card mechanics."
     },
     "delta_summary": "+17% concept_count, +20% relation_count, +16% uc_total, +12% keyword_count"
   },
@@ -848,10 +1263,32 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Comprehensive Attack & Block Triggers",
+          "type": "RuleSystem",
+          "explanation": "Addition of detailed rules 508.3-508.3d and 508.6-508.7c for nuanced triggered abilities based on attacking/blocking conditions (alone, targeting player/planeswalker, reselecting attack target). This introduced multiple new concepts and required extensive rule additions.",
+          "affected_concepts": [
+            "concept.attacked_alone",
+            "concept.blocked_alone",
+            "concept.trigger_at_beginning"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Keyword Ability Codification",
+          "type": "Mechanic",
+          "explanation": "Formal addition of evergreen keywords (Deathtouch, Defender, Double Strike, Enchant, Equip) and 'Create' to the comprehensive rules, increasing keyword count by 55.2%."
+        },
+        {
+          "name": "Draw Replacement Effect Clarification",
+          "type": "RuleSystem",
+          "explanation": "Addition of rule 120.2a-b to clarify how replacement effects modify multi-card draws and interact with 'can't draw more than one' effects."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by a major expansion of the combat trigger rule system to support nuanced 'attacks alone', 'is attacked', and attack-redirection mechanics, secondarily amplified by formal codification of several evergreen keywords."
     },
     "delta_summary": "+10% concept_count, +55% keyword_count"
   },
@@ -880,10 +1317,52 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Crew",
+          "type": "Keyword",
+          "explanation": "The addition of the Crew keyword action (702.121) introduced the vehicle artifact subtype and the complex timing/activation rules for turning artifacts into creatures, requiring new continuous effect and layer considerations.",
+          "affected_concepts": [
+            "concept.continuous_effect_static_ability",
+            "concept.continuous_effect_resolution"
+          ],
+          "estimated_contribution_pct": 35
+        },
+        {
+          "name": "Splice",
+          "type": "Mechanic",
+          "explanation": "The reintroduction of Splice onto Arcane (702.46) with concept.spliced_text added significant rules overhead for modifying spells on the stack, affecting timing, costs, and text-changing interactions.",
+          "affected_concepts": [
+            "concept.spliced_text"
+          ],
+          "estimated_contribution_pct": 25
+        },
+        {
+          "name": "Unearth",
+          "type": "Keyword",
+          "explanation": "The return of Unearth (702.83) added a keyword action with multiple zones (graveyard, battlefield, exile), a delayed exile trigger, and a 'can't be regenerated' clause, increasing graveyard interaction complexity.",
+          "affected_concepts": [],
+          "estimated_contribution_pct": 15
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Provoke",
+          "type": "Keyword",
+          "explanation": "Added combat complexity by forcing creatures to block and allowing them to untap."
+        },
+        {
+          "name": "Emerge",
+          "type": "Keyword",
+          "explanation": "Added alternative casting cost and sacrifice interaction."
+        },
+        {
+          "name": "Multiple returning keywords",
+          "type": "Mechanic",
+          "explanation": "Batch addition of Fabricate, Melee, Escalate, Double, and Emerge collectively increased keyword_action count by 135 (44.5%)."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the reintroduction of the Crew and Splice mechanics, which required new continuous effect and spell-modification rule systems, plus a batch of returning keywords led by Unearth."
     },
     "delta_summary": "+7% concept_count, +14% uc_total, +45% keyword_count"
   },
@@ -1026,10 +1505,34 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Commander Variant System",
+          "type": "RuleSystem",
+          "explanation": "Addition of comprehensive rules for Commander, Brawl, Commander Draft, and related concepts (commander designation, variants) introduced a major new rule framework and multiple sub-mechanics.",
+          "affected_concepts": [
+            "mechanic.commander",
+            "concept.commander_designation",
+            "mechanic.brawl",
+            "mechanic.commander_draft",
+            "mechanic.archenemy_commander"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Casual Variants Chapter",
+          "type": "RuleSystem",
+          "explanation": "New chapter consolidating rules for Planechase, Vanguard, Archenemy, Conspiracy Draft, and Supervillain Rumble added multiple independent rule systems."
+        },
+        {
+          "name": "Triple",
+          "type": "Keyword",
+          "explanation": "Addition of new Triple keyword action with detailed rules for power/toughness modification (701.11 series) added mechanical complexity."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the comprehensive integration of the Commander variant ecosystem and a new chapter for casual multiplayer formats, significantly expanding the rules framework for non-standard play."
     },
     "delta_summary": "+12% concept_count, +37% keyword_count"
   },
@@ -1053,10 +1556,34 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Sneak",
+          "type": "Keyword",
+          "explanation": "New keyword that allows casting permanent spells as though they had flash, then entering tapped and attacking. This required new rules for putting creatures onto the battlefield attacking outside normal declare attackers step, modifying combat timing and interaction rules.",
+          "affected_concepts": [
+            "concept.planeswalker_in_combat",
+            "concept.battle_in_combat",
+            "concept.trigger_condition_combat",
+            "keyword_action.declare_attackers",
+            "keyword_action.declare_blockers"
+          ],
+          "estimated_contribution_pct": 65
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Mutagen tokens",
+          "type": "Mechanic",
+          "explanation": "New artifact token type with activated ability requiring rules for its creation and usage"
+        },
+        {
+          "name": "Combat keyword expansion",
+          "type": "Mechanic",
+          "explanation": "Addition of 7 evergreen keywords (lifelink, trample, hexproof, indestructible, protection, vigilance, menace) requiring comprehensive rules updates"
+        }
+      ],
+      "summary": "The Sneak keyword mechanic fundamentally altered combat timing rules by allowing creatures to enter attacking outside normal phases, driving most of the complexity spike through new combat concepts and rule additions."
     },
     "delta_summary": "+8% concept_count, +20% keyword_count"
   },
@@ -1173,10 +1700,32 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Enchant Ability",
+          "type": "Keyword",
+          "explanation": "The introduction of the 'enchant ability' keyword (from the Haunt mechanic in DIS) required new rules for targeting and attaching to abilities rather than permanents, creating complex layer interactions and zone-change relationships.",
+          "affected_concepts": [
+            "concept.enchant_ability",
+            "concept.object_movement",
+            "concept.contradictory_effects"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Object Movement Between Zones",
+          "type": "RuleSystem",
+          "explanation": "Rules for objects moving between zones (especially for Haunt and delayed triggers) increased relational complexity in the CR graph."
+        },
+        {
+          "name": "Extra Turn/Phase/Step Mechanics",
+          "type": "MechanicPattern",
+          "explanation": "Formalizing rules for extra turns, phases, and steps (relevant to cards like Withering Boon) added branching turn structure complexity."
+        }
+      ],
+      "summary": "The Haunt mechanic's 'enchant ability' keyword introduced a novel attachment paradigm that dramatically increased rules complexity by requiring new systems for targeting abilities and tracking objects across zones."
     },
     "delta_summary": "+13% relation_count, +15% keyword_count"
   },
@@ -1200,10 +1749,32 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Meld / Double-Faced Cards (EMN)",
+          "type": "Mechanic",
+          "explanation": "The introduction of meld (rule 712) and associated rules for naming, CMC calculation, and combined back faces required extensive new rule structures for object identity, naming, and permanent characteristics.",
+          "affected_concepts": [
+            "concept.face_down_card",
+            "mechanic.object_identity_change",
+            "concept.manifested"
+          ],
+          "estimated_contribution_pct": 60
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Multiplayer Rules Expansion",
+          "type": "RuleSystem",
+          "explanation": "Addition of formal multiplayer concepts (player leaving, starting player) and related combat damage assignment/proposing spell actions broadened the rule framework's scope."
+        },
+        {
+          "name": "Characteristic-Setting Effects & Counters",
+          "type": "RuleSystem",
+          "explanation": "New rules for -1/-1 counters and characteristic-setting effects added layers to permanent state management and interaction."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the intricate meld mechanic requiring new object-identity and naming systems, secondarily expanded by formalized multiplayer rules and state-based effect subsystems."
     },
     "delta_summary": "+11% relation_count, +14% uc_total"
   },
@@ -1227,10 +1798,42 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Planeswalker card type",
+          "type": "CardType",
+          "explanation": "Introduction of a new permanent type with unique rules for loyalty, damage redirection, and a new 'legend-like' planeswalker uniqueness rule, requiring extensive new rules text and interactions.",
+          "affected_concepts": [
+            "card_type.planeswalker",
+            "concept.damage",
+            "rule.legend_rule"
+          ],
+          "estimated_contribution_pct": 60
+        },
+        {
+          "name": "Tribal card type",
+          "type": "CardType",
+          "explanation": "Introduction of a novel card type that can share other card types (e.g., Tribal Instant), creating new layer and characteristic complexities for non-permanent spells.",
+          "affected_concepts": [
+            "card_type.tribal",
+            "characteristic"
+          ],
+          "estimated_contribution_pct": 20
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Legend & World Rules",
+          "type": "RuleSystem",
+          "explanation": "Formalization of the Legend Rule and World Rule as distinct, trackable mechanic patterns."
+        },
+        {
+          "name": "New Keywords & Concepts",
+          "type": "Keyword",
+          "explanation": "Addition of keywords (Attacks, Playing a Land) and concepts (Attachment, Creature Land, Fortification) that expanded the rule framework."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the Planeswalker and Tribal card types, which required extensive new rules systems and interactions."
     },
     "delta_summary": "+13% uc_total, +10% keyword_count"
   },
@@ -1335,10 +1938,46 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Level Up",
+          "type": "Keyword",
+          "explanation": "Introduced a new permanent type-modifying mechanic with ongoing state tracking, requiring new rules for leveler cards, their characteristics, and interactions with other game layers.",
+          "affected_concepts": [
+            "characteristic.loyalty",
+            "chapter.card_types",
+            "concept.dependency_system"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Annihilator",
+          "type": "Keyword",
+          "explanation": "Introduced a triggered ability with a mandatory sacrifice action upon attack declaration, creating new timing and action dependencies within the combat phase and state-based action checks.",
+          "affected_concepts": [
+            "mechanic.state_based_actions",
+            "concept.dependency_system"
+          ],
+          "estimated_contribution_pct": 25
+        },
+        {
+          "name": "Dependency System",
+          "type": "RuleSystem",
+          "explanation": "Formalized the rules for ordering simultaneous triggered abilities and replacement effects, a foundational system that increased complexity for all future card interactions and required clarification of core game processes.",
+          "affected_concepts": [
+            "concept.casting_a_spell",
+            "concept.activating_an_ability",
+            "mechanic.turn_based_actions",
+            "mechanic.state_based_actions"
+          ],
+          "estimated_contribution_pct": 35
+        }
+      ],
+      "secondary_factors": [
+        "Rebound",
+        "Totem Armor"
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the ongoing state-tracking 'Level Up' mechanic, the attack-triggered 'Annihilator' sacrifice system, and the foundational formalization of the game's 'Dependency System' for ordering effects."
     },
     "delta_summary": "+13% keyword_count"
   },
@@ -1357,10 +1996,45 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
+      "primary_culprits": [
+        {
+          "name": "Planeswalker Type",
+          "type": "RuleSystem",
+          "explanation": "The formalization of the Planeswalker card type and its associated rules (loyalty abilities, damage redirection, planeswalker uniqueness rule) required extensive new systems for card types, interactions, and layers.",
+          "affected_concepts": [
+            "planeswalker_type",
+            "cardtype.cardtype",
+            "concept.redirect_effect"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Multiplayer Variant Rules",
+          "type": "RuleSystem",
+          "explanation": "Addition of comprehensive rules for Team vs. Team, Grand Melee, and other multiplayer variants introduced complex systems for shared turns, alternate turn structures, and multiplayer-specific procedures.",
+          "affected_concepts": [
+            "concept.shared_team_turns",
+            "concept.grand_melee_stack",
+            "concept.team_vs_team",
+            "concept.alternating_teams",
+            "concept.starting_player_mulligan"
+          ],
+          "estimated_contribution_pct": 35
+        },
+        {
+          "name": "Timestamp & Copy Effect Systems",
+          "type": "RuleSystem",
+          "explanation": "Formal definitions for the timestamp system and copy effects created new, intricate layers of rules for resolving continuous effects and object characteristics.",
+          "affected_concepts": [
+            "concept.timestamp_system",
+            "concept.cda",
+            "concept.cost_lock_in"
+          ],
+          "estimated_contribution_pct": 25
+        }
+      ],
       "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "summary": "The complexity spike was primarily driven by the formalization of the Planeswalker card type's rules, the addition of comprehensive multiplayer variant systems, and the definition of intricate systems for timestamps and copy effects."
     },
     "delta_summary": "+15% keyword_count"
   },
@@ -1379,10 +2053,55 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": "{\n  \"primary_culprits\": [\n    {\n      \"name\": \"Splice\",\n      \"type\": \"Keyword\",\n      \"explanation\": \"Splice lets a card’s text be appended to another spell, creating recursive spell‑modifying interactions that require new rule handling and increase game‑state complexity.\",\n      \"affected_concepts\": [\"concept.splice\"],\n      \"estimated_contribution_pct\": 20\n    },\n    {\n      \"name\": \"Layer System (Continuous Effects)\",\n      \"type\": \"RuleSystem\",\n      \"explanation\": \"The introduction of a seven‑layer system for applying continuous effects, with sub‑layers for copy, control, text, type, color, abilities, power/toughness, counters, etc., forces a deterministic ordering of all such effects, leading to a system‑wide ripple in rule logic and interaction checks.\",\n      \"affected_concepts\": [\n        \"concept.layer.1_copy_effects\",\n        \"concept.layer.2_control_changing_effects\",\n        \"concept.layer.3_text_changing_effects\",\n        \"concept.layer.4_type_changing_effects\",\n        \"concept.layer.5_color_changing_effects\",\n        \"concept.layer.6_ability_effects\",\n        \"concept.layer.7_power_toughness_effects\",\n        \"concept.layer.7a_cda_pt\",\n        \"concept.layer.7b_set_pt\",\n        \"concept.layer.7c_modify_pt\",\n        \"concept.layer.7d_counters\"\n      ],\n      \"estimated_contribution_pct\": 35\n    },\n    {\n      \"name\": \"As‑Though Effect\",\n      \"type\": \"Concept\",\n      \"explanation\": \"As‑though effects allow a card to be treated as if it had a different characteristic or were in a different zone, enabling novel loops and interaction patterns that require additional rule definitions.\",\n      \"affected_concepts\": [\"concept.as_though_effect\"],\n      \"estimated_contribution_pct\": 20\n    },\n    {\n      \"name\": \"Activation Timing Restriction\",\n      \"type\": \"MechanicPattern\",\n      \"explanation\": \"New restrictions on when abilities can be activated (e.g., limits on mana abilities, specific timing windows) add complexity to the stack and timing windows, deman"
+      "primary_culprits": [
+        {
+          "name": "Layer System",
+          "type": "RuleSystem",
+          "explanation": "The introduction of the comprehensive layer system (Layers 1-7 and 7a) to resolve continuous effect interactions added significant conceptual and mechanical complexity to the rulebook.",
+          "affected_concepts": [
+            "concept.layer.1_copy_effects",
+            "concept.layer.2_control_changing_effects",
+            "concept.layer.3_text_changing_effects",
+            "concept.layer.4_type_changing_effects",
+            "concept.layer.5_color_changing_effects",
+            "concept.layer.6_ability_effects",
+            "concept.layer.7_power_toughness_effects",
+            "concept.layer.7a_cda_pt"
+          ],
+          "estimated_contribution_pct": 70
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Splice",
+          "type": "Keyword",
+          "explanation": "Re-introduction of the Splice mechanic required rules for playing cards with spliced components.",
+          "affected_concepts": [
+            "concept.splice",
+            "action.playing_card"
+          ],
+          "estimated_contribution_pct": 15
+        },
+        {
+          "name": "As Though Effects",
+          "type": "Concept",
+          "explanation": "Formalization of 'as though' effects as a distinct category of continuous effects.",
+          "affected_concepts": [
+            "concept.as_though_effect"
+          ],
+          "estimated_contribution_pct": 10
+        },
+        {
+          "name": "Activation Timing Restrictions",
+          "type": "MechanicPattern",
+          "explanation": "Added specific rules for timing restrictions on activated abilities.",
+          "affected_concepts": [
+            "concept.activation_timing_restriction"
+          ],
+          "estimated_contribution_pct": 5
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the formal introduction of the comprehensive layer system, a major rules framework for resolving continuous effects."
     },
     "delta_summary": "+12% keyword_count"
   },
@@ -1401,10 +2120,41 @@
       }
     },
     "analysis": {
-      "primary_culprits": [],
-      "secondary_factors": [],
-      "summary": "(analysis failed to parse)",
-      "_raw_response": ""
+      "primary_culprits": [
+        {
+          "name": "Energy Counter",
+          "type": "Mechanic",
+          "explanation": "Introduced a new permanent resource type (energy) tracked by players, requiring new rules for its acquisition, storage, and use, separate from mana or other counters.",
+          "affected_concepts": [
+            "concept.energy_counter"
+          ],
+          "estimated_contribution_pct": 40
+        },
+        {
+          "name": "Vehicle",
+          "type": "Mechanic",
+          "explanation": "Introduced a new artifact subtype with the crew mechanic, creating a new layer of rules for how artifacts become creatures, how they are affected by summoning sickness, and their interaction with combat.",
+          "affected_concepts": [
+            "artifact_subtype.vehicle",
+            "action.attacks_alone",
+            "action.blocks_alone"
+          ],
+          "estimated_contribution_pct": 30
+        }
+      ],
+      "secondary_factors": [
+        {
+          "name": "Zone Ownership & Library Position",
+          "type": "RuleSystem",
+          "explanation": "Added finer-grained definitions for tracking card ownership in zones and specific library positions, increasing rules precision."
+        },
+        {
+          "name": "Fabricate Mechanic & Face-Down Exiled Cards",
+          "type": "Mechanic",
+          "explanation": "The Fabricate mechanic (from Kaladesh) created face-down exiled cards, requiring new rules to handle this previously non-existent state."
+        }
+      ],
+      "summary": "The complexity spike was primarily driven by the introduction of the new resource system (Energy) and the new permanent type framework (Vehicles), which required extensive new rules and subsystems."
     },
     "delta_summary": "+11% keyword_count"
   },
