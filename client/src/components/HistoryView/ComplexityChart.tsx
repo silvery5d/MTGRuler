@@ -14,14 +14,14 @@ interface ChartPoint {
   release_date: string | null;
   rule_count: number;
   concept_count: number;
-  uc_total: number;
+  uc_avg: number;
   keyword_count: number;
 }
 
 const METRIC_LINES = [
   { key: "rule_count", color: "#6366f1", label: "Rule Count" },
   { key: "concept_count", color: "#10b981", label: "Concept Count" },
-  { key: "uc_total", color: "#f59e0b", label: "Understanding Complexity (Total)" },
+  { key: "uc_avg", color: "#f59e0b", label: "Understanding Complexity (Avg)" },
   { key: "keyword_count", color: "#ef4444", label: "Keyword Count" },
 ];
 
@@ -36,7 +36,7 @@ export function ComplexityChart({ metrics, spikes, onSpikeClick }: ComplexityCha
         release_date: m.release_date,
         rule_count: m.scale.rule_count,
         concept_count: m.graph.concept_count,
-        uc_total: m.cognitive.uc_total,
+        uc_avg: m.cognitive.uc_avg,
         keyword_count: m.mechanic.keyword_count,
       })),
     [metrics],
@@ -107,7 +107,7 @@ export function ComplexityChart({ metrics, spikes, onSpikeClick }: ComplexityCha
                 <ReferenceDot
                   key={s.set_code}
                   x={s.set_code}
-                  y={point.uc_total}
+                  y={point.uc_avg}
                   r={6}
                   fill="#fbbf24"
                   stroke="#fff"

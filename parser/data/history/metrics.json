@@ -696,11 +696,11 @@
     "set_name": "Onslaught",
     "release_date": "2002-10-07",
     "scale": {
-      "rule_count": 0,
-      "rule_total_words": 0,
-      "rule_avg_length": 0.0,
+      "rule_count": 500,
+      "rule_total_words": 24860,
+      "rule_avg_length": 49.7,
       "chapter_count": 11,
-      "max_rule_depth": 0
+      "max_rule_depth": 6
     },
     "graph": {
       "concept_count": 258,
@@ -5428,11 +5428,11 @@
     "set_name": "Scars of Mirrodin",
     "release_date": "2010-10-01",
     "scale": {
-      "rule_count": 0,
-      "rule_total_words": 0,
-      "rule_avg_length": 0.0,
+      "rule_count": 1770,
+      "rule_total_words": 79604,
+      "rule_avg_length": 45.0,
       "chapter_count": 41,
-      "max_rule_depth": 0
+      "max_rule_depth": 6
     },
     "graph": {
       "concept_count": 953,
@@ -5589,11 +5589,11 @@
     "set_name": "Mirrodin Besieged",
     "release_date": "2011-02-04",
     "scale": {
-      "rule_count": 0,
-      "rule_total_words": 0,
-      "rule_avg_length": 0.0,
+      "rule_count": 1781,
+      "rule_total_words": 80094,
+      "rule_avg_length": 45.0,
       "chapter_count": 40,
-      "max_rule_depth": 0
+      "max_rule_depth": 6
     },
     "graph": {
       "concept_count": 966,
@@ -5929,11 +5929,11 @@
     "set_name": "Magic 2012",
     "release_date": "2011-07-15",
     "scale": {
-      "rule_count": 0,
-      "rule_total_words": 0,
-      "rule_avg_length": 0.0,
+      "rule_count": 1824,
+      "rule_total_words": 81929,
+      "rule_avg_length": 44.9,
       "chapter_count": 43,
-      "max_rule_depth": 0
+      "max_rule_depth": 6
     },
     "graph": {
       "concept_count": 1017,
