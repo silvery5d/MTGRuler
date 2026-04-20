@@ -141,10 +141,13 @@ export function createHistoryRouter(): Router {
       "concept.enchantment": "keyword.enchant",
       "concept.land": "concept.card_type.land",
       "concept.legend": "concept.legend_rule",  // Legend creature type → Legendary supertype + Legend Rule
+      // Land reclassification
+      "concept.nonbasic_land": "concept.basic_land",  // "nonbasic" absorbed into "basic land" definition
       // Phase/step renames
       "phase.first_main": "concept.main_phase",
       "phase.second_main": "concept.main_phase",
       "phase.end": "concept.end_of_turn",
+      "step.end_of_turn": "concept.end_of_turn",  // End of Turn Step → End of Turn
     };
 
     // Detect likely renames: match removed→added by name_en similarity
@@ -152,11 +155,13 @@ export function createHistoryRouter(): Router {
     const matchedOldIds = new Set<string>();
     const matchedNewIds = new Set<string>();
 
-    // Pass 0: known historical renames (allow many-to-one: multiple old IDs → same new ID)
+    // Pass 0: known historical renames (target may be in added OR already shared)
     for (const old of removedRaw) {
       const knownNew = KNOWN_RENAMES[old.id];
       if (knownNew) {
-        const match = addedRaw.find((n) => n.id === knownNew);
+        // Look in added first, then in all new concepts
+        const match = addedRaw.find((n) => n.id === knownNew) ||
+          newRows.find((n) => n.id === knownNew);
         if (match) {
           renamed.push({ old_id: old.id, new_id: match.id, old_name: old.name_en, new_name: match.name_en, confidence: "high" });
           matchedOldIds.add(old.id);
