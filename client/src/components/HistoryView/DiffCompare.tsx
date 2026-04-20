@@ -109,7 +109,7 @@ export function DiffCompare({ versions, oldCode, newCode, oldGraph, newGraph, di
           </div>
 
           {diff && (
-            <div className="max-h-40 overflow-y-auto bg-gray-900 border-t border-gray-700 p-3 grid grid-cols-2 gap-3">
+            <div className="max-h-48 overflow-y-auto bg-gray-900 border-t border-gray-700 p-3 grid grid-cols-3 gap-3">
               <div>
                 <h4 className="text-sm font-bold text-green-400 mb-1">+ Added ({diff.added.length})</h4>
                 <div className="space-y-1 text-xs">
@@ -130,6 +130,18 @@ export function DiffCompare({ versions, oldCode, newCode, oldGraph, newGraph, di
                   ))}
                 </div>
               </div>
+              {diff.renamed && diff.renamed.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-bold text-amber-400 mb-1">~ Renamed ({diff.renamed.length})</h4>
+                  <div className="space-y-1 text-xs">
+                    {diff.renamed.slice(0, 20).map((r) => (
+                      <div key={r.old_id} className="text-gray-200">
+                        <span className="text-amber-400">~</span> {r.old_name} → {r.new_name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>

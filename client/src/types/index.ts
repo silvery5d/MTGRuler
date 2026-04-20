@@ -141,6 +141,7 @@ export interface SpikeRecord {
 export interface HistoryDiff {
   added: Concept[];
   removed: Concept[];
+  renamed: { old_id: string; new_id: string; old_name: string; new_name: string }[];
   old_set: string;
   new_set: string;
 }

@@ -119,10 +119,48 @@ export function createHistoryRouter(): Router {
     ).all() as Concept[];
     const newIds = new Set(newRows.map((c) => c.id));
 
-    const added = newRows.filter((c) => !oldIds.has(c.id));
-    const removed = oldRows.filter((c) => !newIds.has(c.id));
+    const addedRaw = newRows.filter((c) => !oldIds.has(c.id));
+    const removedRaw = oldRows.filter((c) => !newIds.has(c.id));
 
-    res.json({ added, removed, old_set: oldCode, new_set: newCode });
+    // Detect likely renames: match removed→added by name_en similarity
+    const renamed: { old_id: string; new_id: string; old_name: string; new_name: string }[] = [];
+    const matchedOldIds = new Set<string>();
+    const matchedNewIds = new Set<string>();
+
+    for (const old of removedRaw) {
+      if (matchedOldIds.has(old.id)) continue;
+      const oldName = (old.name_en || "").toLowerCase();
+      // Exact name match first
+      let best = addedRaw.find(
+        (n) => !matchedNewIds.has(n.id) && (n.name_en || "").toLowerCase() === oldName,
+      );
+      // Fallback: same type + name contains / is contained
+      if (!best) {
+        best = addedRaw.find(
+          (n) =>
+            !matchedNewIds.has(n.id) &&
+            n.type === old.type &&
+            oldName.length > 3 &&
+            ((n.name_en || "").toLowerCase().includes(oldName) ||
+              oldName.includes((n.name_en || "").toLowerCase())),
+        );
+      }
+      if (best) {
+        renamed.push({
+          old_id: old.id,
+          new_id: best.id,
+          old_name: old.name_en,
+          new_name: best.name_en,
+        });
+        matchedOldIds.add(old.id);
+        matchedNewIds.add(best.id);
+      }
+    }
+
+    const added = addedRaw.filter((c) => !matchedNewIds.has(c.id));
+    const removed = removedRaw.filter((c) => !matchedOldIds.has(c.id));
+
+    res.json({ added, removed, renamed, old_set: oldCode, new_set: newCode });
   });
 
   router.get("/concept-trace/:id", (req, res) => {
