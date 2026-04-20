@@ -134,9 +134,15 @@ export function DiffCompare({ versions, oldCode, newCode, oldGraph, newGraph, di
                 <div>
                   <h4 className="text-sm font-bold text-amber-400 mb-1">~ Renamed ({diff.renamed.length})</h4>
                   <div className="space-y-1 text-xs">
-                    {diff.renamed.slice(0, 20).map((r) => (
+                    {diff.renamed.slice(0, 25).map((r: any) => (
                       <div key={r.old_id} className="text-gray-200">
-                        <span className="text-amber-400">~</span> {r.old_name} → {r.new_name}
+                        <span className={r.confidence === "high" ? "text-amber-400" : "text-amber-700"}>
+                          {r.confidence === "high" ? "~" : "?"}
+                        </span>
+                        {" "}{r.old_id} → {r.new_id}
+                        {r.old_name !== r.new_name && (
+                          <span className="text-gray-500 ml-1">({r.old_name} → {r.new_name})</span>
+                        )}
                       </div>
                     ))}
                   </div>

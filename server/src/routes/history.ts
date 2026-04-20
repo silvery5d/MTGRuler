@@ -123,34 +123,39 @@ export function createHistoryRouter(): Router {
     const removedRaw = oldRows.filter((c) => !newIds.has(c.id));
 
     // Detect likely renames: match removed→added by name_en similarity
-    const renamed: { old_id: string; new_id: string; old_name: string; new_name: string }[] = [];
+    const renamed: { old_id: string; new_id: string; old_name: string; new_name: string; confidence: "high" | "medium" }[] = [];
     const matchedOldIds = new Set<string>();
     const matchedNewIds = new Set<string>();
 
     for (const old of removedRaw) {
       if (matchedOldIds.has(old.id)) continue;
-      const oldName = (old.name_en || "").toLowerCase();
-      // Exact name match first
+      const oldName = (old.name_en || "").toLowerCase().trim();
+      if (oldName.length < 2) continue;
+
+      // High confidence: exact name match (different ID, same name)
       let best = addedRaw.find(
-        (n) => !matchedNewIds.has(n.id) && (n.name_en || "").toLowerCase() === oldName,
+        (n) => !matchedNewIds.has(n.id) && (n.name_en || "").toLowerCase().trim() === oldName,
       );
-      // Fallback: same type + name contains / is contained
+      let confidence: "high" | "medium" = "high";
+
+      // Medium confidence: same base id slug (e.g. concept.shuffle → keyword_action.shuffle)
       if (!best) {
-        best = addedRaw.find(
-          (n) =>
-            !matchedNewIds.has(n.id) &&
-            n.type === old.type &&
-            oldName.length > 3 &&
-            ((n.name_en || "").toLowerCase().includes(oldName) ||
-              oldName.includes((n.name_en || "").toLowerCase())),
-        );
+        const oldSlug = old.id.split(".").pop() || "";
+        if (oldSlug.length > 3) {
+          best = addedRaw.find(
+            (n) => !matchedNewIds.has(n.id) && n.id.split(".").pop() === oldSlug,
+          );
+          confidence = "medium";
+        }
       }
+
       if (best) {
         renamed.push({
           old_id: old.id,
           new_id: best.id,
           old_name: old.name_en,
           new_name: best.name_en,
+          confidence,
         });
         matchedOldIds.add(old.id);
         matchedNewIds.add(best.id);
