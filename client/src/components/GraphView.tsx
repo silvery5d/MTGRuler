@@ -160,9 +160,10 @@ export function GraphView({
           const edgeCount = cy.edges().length;
           const density = nodeCount > 0 ? edgeCount / nodeCount : 1;
 
-          const baseRepulsion = Math.max(15000, 6000 * (1 + density));
-          const edgeLen = Math.max(180, 100 + nodeCount * 0.5);
-          const separation = 200;
+          // Scale aggressively with node count so dense graphs spread out
+          const baseRepulsion = Math.max(25000, 8000 * (1 + density) + nodeCount * 30);
+          const edgeLen = Math.max(200, 120 + nodeCount * 0.6);
+          const separation = Math.max(250, 150 + nodeCount * 0.2);
 
           const layout = cy.layout({
             name: "fcose",
@@ -177,32 +178,75 @@ export function GraphView({
           } as cytoscape.LayoutOptions);
           layout.run();
 
-          // Post-layout: push apart overlapping nodes
-          const OVERLAP_THRESHOLD = 5; // pixels in model space
-          const PUSH_DISTANCE = 30;
-          const positions = new Map<string, { x: number; y: number }>();
+          // Post-layout: iterative collision resolution to separate
+          // overlapping nodes. Uses each node's actual size for the
+          // collision radius so bigger nodes need more spacing.
+          const positions = new Map<string, { x: number; y: number; r: number }>();
           cy.nodes().forEach((n) => {
-            positions.set(n.id(), { ...n.position() });
+            const sz = n.data("size") || 14;
+            positions.set(n.id(), { ...n.position(), r: sz / 2 + 6 });
           });
-          cy.nodes().forEach((n) => {
-            const pos = positions.get(n.id())!;
-            cy.nodes().forEach((m) => {
-              if (n.id() >= m.id()) return;
-              const mpos = positions.get(m.id())!;
-              const dx = pos.x - mpos.x;
-              const dy = pos.y - mpos.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < OVERLAP_THRESHOLD) {
-                // Push apart in a circle pattern based on hash
-                const angle = ((n.id().length * 97 + m.id().length * 31) % 360) * Math.PI / 180;
-                mpos.x += Math.cos(angle) * PUSH_DISTANCE;
-                mpos.y += Math.sin(angle) * PUSH_DISTANCE;
+
+          // Bucket nodes into a spatial grid to avoid O(n^2) scans.
+          const CELL = 80;
+          const buildGrid = () => {
+            const grid = new Map<string, string[]>();
+            positions.forEach((p, id) => {
+              const gx = Math.floor(p.x / CELL);
+              const gy = Math.floor(p.y / CELL);
+              const key = `${gx},${gy}`;
+              if (!grid.has(key)) grid.set(key, []);
+              grid.get(key)!.push(id);
+            });
+            return grid;
+          };
+
+          for (let pass = 0; pass < 8; pass++) {
+            const grid = buildGrid();
+            let movedAny = false;
+            positions.forEach((pa, aid) => {
+              const gx = Math.floor(pa.x / CELL);
+              const gy = Math.floor(pa.y / CELL);
+              for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                  const ids = grid.get(`${gx + dx},${gy + dy}`);
+                  if (!ids) continue;
+                  for (const bid of ids) {
+                    if (aid >= bid) continue;
+                    const pb = positions.get(bid)!;
+                    const vx = pb.x - pa.x;
+                    const vy = pb.y - pa.y;
+                    const d = Math.sqrt(vx * vx + vy * vy);
+                    const minDist = pa.r + pb.r;
+                    if (d < minDist) {
+                      const overlap = minDist - d;
+                      // Avoid divide-by-zero when nodes are exactly on top
+                      let nx = vx, ny = vy;
+                      if (d < 0.001) {
+                        const ang = (aid.length * 97 + bid.length * 31) % 360 * Math.PI / 180;
+                        nx = Math.cos(ang);
+                        ny = Math.sin(ang);
+                      } else {
+                        nx /= d;
+                        ny /= d;
+                      }
+                      const shift = overlap / 2 + 1;
+                      pa.x -= nx * shift;
+                      pa.y -= ny * shift;
+                      pb.x += nx * shift;
+                      pb.y += ny * shift;
+                      movedAny = true;
+                    }
+                  }
+                }
               }
             });
-          });
+            if (!movedAny) break;
+          }
+
           cy.batch(() => {
             positions.forEach((pos, id) => {
-              cy.getElementById(id).position(pos);
+              cy.getElementById(id).position({ x: pos.x, y: pos.y });
             });
           });
         } catch {
