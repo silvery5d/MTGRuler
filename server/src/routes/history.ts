@@ -136,10 +136,11 @@ export function createHistoryRouter(): Router {
       "concept.local_enchantment": "concept.card_type.aura",
       "enchantment.local": "concept.card_type.aura",
       "concept.global_enchantment": "enchantment_subtype.saga",
-      // Card type reclassification
+      // Card type / supertype reclassification
       "concept.creature": "concept.card_type.creature",
       "concept.enchantment": "keyword.enchant",
       "concept.land": "concept.card_type.land",
+      "concept.legend": "concept.legend_rule",  // Legend creature type → Legendary supertype + Legend Rule
       // Phase/step renames
       "phase.first_main": "concept.main_phase",
       "phase.second_main": "concept.main_phase",
