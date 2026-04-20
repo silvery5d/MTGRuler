@@ -124,14 +124,26 @@ export function createHistoryRouter(): Router {
 
     // Known historical MTG concept renames (name changed officially)
     const KNOWN_RENAMES: Record<string, string> = {
+      // Zone renames
       "zone.removed_from_game": "zone.exile",
       "concept.removed_from_the_game": "zone.exile",
-      "concept.converted_mana_cost": "concept.mana_value",
-      "concept.local_enchantment": "concept.aura",
-      "concept.global_enchantment": "concept.enchantment",
-      "concept.bury": "action.destroy",
       "concept.in_play": "zone.battlefield",
       "zone.in_play": "zone.battlefield",
+      // Terminology renames
+      "concept.converted_mana_cost": "concept.mana_value",
+      "concept.bury": "action.destroy",
+      // Enchantment reclassification (pre-M10 → modern)
+      "concept.local_enchantment": "concept.card_type.aura",
+      "enchantment.local": "concept.card_type.aura",
+      "concept.global_enchantment": "enchantment_subtype.saga",
+      // Card type reclassification
+      "concept.creature": "concept.card_type.creature",
+      "concept.enchantment": "keyword.enchant",
+      "concept.land": "concept.card_type.land",
+      // Phase/step renames
+      "phase.first_main": "concept.main_phase",
+      "phase.second_main": "concept.main_phase",
+      "phase.end": "concept.end_of_turn",
     };
 
     // Detect likely renames: match removed→added by name_en similarity
@@ -139,11 +151,11 @@ export function createHistoryRouter(): Router {
     const matchedOldIds = new Set<string>();
     const matchedNewIds = new Set<string>();
 
-    // Pass 0: known historical renames
+    // Pass 0: known historical renames (allow many-to-one: multiple old IDs → same new ID)
     for (const old of removedRaw) {
       const knownNew = KNOWN_RENAMES[old.id];
       if (knownNew) {
-        const match = addedRaw.find((n) => !matchedNewIds.has(n.id) && n.id === knownNew);
+        const match = addedRaw.find((n) => n.id === knownNew);
         if (match) {
           renamed.push({ old_id: old.id, new_id: match.id, old_name: old.name_en, new_name: match.name_en, confidence: "high" });
           matchedOldIds.add(old.id);
