@@ -122,10 +122,35 @@ export function createHistoryRouter(): Router {
     const addedRaw = newRows.filter((c) => !oldIds.has(c.id));
     const removedRaw = oldRows.filter((c) => !newIds.has(c.id));
 
+    // Known historical MTG concept renames (name changed officially)
+    const KNOWN_RENAMES: Record<string, string> = {
+      "zone.removed_from_game": "zone.exile",
+      "concept.removed_from_the_game": "zone.exile",
+      "concept.converted_mana_cost": "concept.mana_value",
+      "concept.local_enchantment": "concept.aura",
+      "concept.global_enchantment": "concept.enchantment",
+      "concept.bury": "action.destroy",
+      "concept.in_play": "zone.battlefield",
+      "zone.in_play": "zone.battlefield",
+    };
+
     // Detect likely renames: match removed→added by name_en similarity
     const renamed: { old_id: string; new_id: string; old_name: string; new_name: string; confidence: "high" | "medium" }[] = [];
     const matchedOldIds = new Set<string>();
     const matchedNewIds = new Set<string>();
+
+    // Pass 0: known historical renames
+    for (const old of removedRaw) {
+      const knownNew = KNOWN_RENAMES[old.id];
+      if (knownNew) {
+        const match = addedRaw.find((n) => !matchedNewIds.has(n.id) && n.id === knownNew);
+        if (match) {
+          renamed.push({ old_id: old.id, new_id: match.id, old_name: old.name_en, new_name: match.name_en, confidence: "high" });
+          matchedOldIds.add(old.id);
+          matchedNewIds.add(match.id);
+        }
+      }
+    }
 
     for (const old of removedRaw) {
       if (matchedOldIds.has(old.id)) continue;
@@ -138,25 +163,26 @@ export function createHistoryRouter(): Router {
       );
       let confidence: "high" | "medium" = "high";
 
-      // Medium confidence: same base id slug (e.g. concept.shuffle → keyword_action.shuffle)
+      // Medium confidence: same slug AND names share a significant word
       if (!best) {
         const oldSlug = old.id.split(".").pop() || "";
-        if (oldSlug.length > 3) {
-          best = addedRaw.find(
-            (n) => !matchedNewIds.has(n.id) && n.id.split(".").pop() === oldSlug,
-          );
+        if (oldSlug.length > 5) {
+          const oldWords = new Set(oldName.split(/\s+/).filter((w) => w.length > 3));
+          best = addedRaw.find((n) => {
+            if (matchedNewIds.has(n.id)) return false;
+            if (n.id.split(".").pop() !== oldSlug) return false;
+            // Names must share >50% of significant words (avoids generic matches like "spell")
+            const newWords = (n.name_en || "").toLowerCase().split(/\s+/).filter((w) => w.length > 3);
+            const shared = newWords.filter((w) => oldWords.has(w)).length;
+            const shorter = Math.min(oldWords.size, newWords.length);
+            return shorter > 0 && shared / shorter > 0.5;
+          });
           confidence = "medium";
         }
       }
 
       if (best) {
-        renamed.push({
-          old_id: old.id,
-          new_id: best.id,
-          old_name: old.name_en,
-          new_name: best.name_en,
-          confidence,
-        });
+        renamed.push({ old_id: old.id, new_id: best.id, old_name: old.name_en, new_name: best.name_en, confidence });
         matchedOldIds.add(old.id);
         matchedNewIds.add(best.id);
       }
